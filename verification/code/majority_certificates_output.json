@@ -1,0 +1,29 @@
+{
+ "1": {
+  "L": 1,
+  "q_poly": "1 - epsilon",
+  "q_cert_eps": "667/1000",
+  "theta_cert_eps": "667/1000"
+ },
+ "2": {
+  "L": 2,
+  "q_poly": "-epsilon**4/2 + 2*epsilon**3 - 3*epsilon**2/2 - epsilon + 1",
+  "q_cert_eps": "627/1000",
+  "theta_cert_eps": "627/1000"
+ },
+ "3": {
+  "L": 3,
+  "q_poly": "-epsilon**9/8 + 9*epsilon**8/8 - 9*epsilon**7/2 + 21*epsilon**6/2 - 115*epsilon**5/8 + 71*epsilon**4/8 + epsilon**3 - 5*epsilon**2/2 - epsilon + 1",
+  "q_cert_eps": "587/1000",
+  "theta_cert_eps": "587/1000"
+ },
+ "deeper_certs": {
+  "1": "667/1000",
+  "2": "627/1000",
+  "3": "587/1000",
+  "4": "277/500",
+  "5": "527/1000",
+  "6": "63/125",
+  "7": "97/200"
+ }
+}

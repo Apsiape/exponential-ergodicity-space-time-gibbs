@@ -1,0 +1,66 @@
+Exact finite certificates for the noisy majority PCA (radius 1, alphabet {0,1}).
+Kernel: p(a|u) = (1-eps) 1[a = maj(u)] + eps/2.  Certificates: (2L+1) q_L < 1 and (2L+1) theta_L < 1.
+
+== depth L = 1: 1 update sites, 8 input rows, 3 innovation configurations ==
+q_1(eps) = 1 - epsilon
+         = 1 - epsilon
+  eps      q_L(eps)            (2L+1)q_L        theta_L(eps)         (2L+1)theta_L   max pair   trivial [3(1-eps)]^L
+  1/2      1/2                 1.500000         1/2                 1.500000        (0, 3)   1.500000
+  3/5      2/5                 1.200000         2/5                 1.200000        (0, 3)   1.200000
+  5/8      3/8                 1.125000         3/8                 1.125000        (0, 3)   1.125000
+  2/3      1/3                 1.000000         1/3                 1.000000        (0, 3)   1.000000
+  7/10     3/10                0.900000         3/10                0.900000        (0, 3)   0.900000
+  3/4      1/4                 0.750000         1/4                 0.750000        (0, 3)   0.750000
+  common-map certificate: (2L+1) q_L < 1 holds exactly at eps = 667/1000 (value 0.999000); q_L decreasing on the grid above it: True
+  fixed-pair certificate: (2L+1) theta_L < 1 holds exactly at eps = 667/1000 (value 0.999000, pair (0, 3)); theta_L decreasing on the grid above it: True
+
+== depth L = 2: 4 update sites, 32 input rows, 81 innovation configurations ==
+q_2(eps) = -(epsilon - 1)**2*(epsilon**2 - 2*epsilon - 2)/2
+         = -epsilon**4/2 + 2*epsilon**3 - 3*epsilon**2/2 - epsilon + 1
+  eps      q_L(eps)            (2L+1)q_L        theta_L(eps)         (2L+1)theta_L   max pair   trivial [3(1-eps)]^L
+  1/2      11/32               1.718750         11/32               1.718750        (0, 13)   2.250000
+  3/5      142/625             1.136000         142/625             1.136000        (0, 13)   1.440000
+  5/8      1647/8192           1.005249         1647/8192           1.005249        (0, 13)   1.265625
+  2/3      13/81               0.802469         13/81               0.802469        (0, 13)   1.000000
+  7/10     2619/20000          0.654750         2619/20000          0.654750        (0, 13)   0.810000
+  3/4      47/512              0.458984         47/512              0.458984        (0, 13)   0.562500
+  common-map certificate: (2L+1) q_L < 1 holds exactly at eps = 627/1000 (value 0.995075); q_L decreasing on the grid above it: True
+  fixed-pair certificate: (2L+1) theta_L < 1 holds exactly at eps = 627/1000 (value 0.995075, pair (0, 13)); theta_L decreasing on the grid above it: True
+
+== depth L = 3: 9 update sites, 128 input rows, 19683 innovation configurations ==
+q_3(eps) = -(epsilon - 1)**3*(epsilon**6 - 6*epsilon**5 + 15*epsilon**4 - 20*epsilon**3 + 4*epsilon**2 + 16*epsilon + 8)/8
+         = -epsilon**9/8 + 9*epsilon**8/8 - 9*epsilon**7/2 + 21*epsilon**6/2 - 115*epsilon**5/8 + 71*epsilon**4/8 + epsilon**3 - 5*epsilon**2/2 - epsilon + 1
+  eps      q_L(eps)            (2L+1)q_L        theta_L(eps)         (2L+1)theta_L   max pair   trivial [3(1-eps)]^L
+  1/2      977/4096            1.669678         977/4096            1.669678        (0, 54)   3.375000
+  3/5      253814/1953125      0.909669         253814/1953125      0.909669        (0, 54)   1.728000
+  5/8      116473059/1073741824  0.759318         116473059/1073741824  0.759318        (0, 54)   1.423828
+  2/3      1529/19683          0.543769         1529/19683          0.543769        (0, 54)   1.000000
+  7/10     459289683/8000000000  0.401878         459289683/8000000000  0.401878        (0, 54)   0.729000
+  3/4      70913/2097152       0.236698         70913/2097152       0.236698        (0, 54)   0.421875
+  common-map certificate: (2L+1) q_L < 1 holds exactly at eps = 587/1000 (value 0.994163); q_L decreasing on the grid above it: True
+  fixed-pair certificate: (2L+1) theta_L < 1 holds exactly at eps = 587/1000 (value 0.994163, pair (0, 54)); theta_L decreasing on the grid above it: True
+
+Note. Each certificate is verified in exact rational arithmetic at the stated point. Monotonicity of q_L and theta_L in eps
+is reported on the grid only and is not used by the paper.
+
+== Part 2: monotone shortcut, theta_L = q_L = P(g(1..1)=1) - P(g(0..0)=1), by exact row transfer ==
+Cross-check against brute force (Part 1) at eps = 2/3:
+  L=1: q_L(2/3) by row transfer = 1/3
+  L=2: q_L(2/3) by row transfer = 13/81
+  L=3: q_L(2/3) by row transfer = 1529/19683
+Certified fixed-pair thresholds on the grid eps = k/1000 (first grid point passing in floating point, then verified exactly):
+  L=1: (2L+1) q_L < 1 holds exactly at eps = 667/1000:  (2L+1) q_L = 0.999000   [0.0s]
+  L=2: (2L+1) q_L < 1 holds exactly at eps = 627/1000:  (2L+1) q_L = 0.995075   [0.0s]
+  L=3: (2L+1) q_L < 1 holds exactly at eps = 587/1000:  (2L+1) q_L = 0.994163   [0.1s]
+  L=4: (2L+1) q_L < 1 holds exactly at eps = 277/500:  (2L+1) q_L = 0.994982   [0.2s]
+  L=5: (2L+1) q_L < 1 holds exactly at eps = 527/1000:  (2L+1) q_L = 0.994413   [1.9s]
+  L=6: (2L+1) q_L < 1 holds exactly at eps = 63/125:  (2L+1) q_L = 0.997386   [28.9s]
+  L=7: (2L+1) q_L < 1 holds exactly at eps = 97/200:  (2L+1) q_L = 0.993011   [678.4s]
+Exact values of (2L+1) q_L at eps = 3/5 and eps = 1/2:
+  L=1: eps=3/5: 1.200000   eps=1/2: 1.500000
+  L=2: eps=3/5: 1.136000   eps=1/2: 1.718750
+  L=3: eps=3/5: 0.909669   eps=1/2: 1.669678
+  L=4: eps=3/5: 0.669309   eps=1/2: 1.491036
+  L=5: eps=3/5: 0.468175   eps=1/2: 1.266012
+  L=6: eps=3/5: 0.316663   eps=1/2: 1.039477
+  L=7: eps=3/5: 0.209115   eps=1/2: 0.833294

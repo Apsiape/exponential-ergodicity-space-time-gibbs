@@ -1,0 +1,37 @@
+# Exponential ergodicity and the space-time Gibbs states of one-dimensional probabilistic cellular automata
+
+Seth Douglas and Nidhal Mghirbi. Version 1.1.0, November 2026.
+
+**This is a preprint. It has not been peer reviewed.**
+
+## Abstract
+
+A positive-rate probabilistic cellular automaton (PCA) defines a Gibbs specification in one more dimension, its space–time interaction, in which the future is a boundary like the past and the sides. For finite-alphabet, finite-radius, strictly positive PCA on $\mathbb{Z}$ we prove that uniform exponential ergodicity of the dynamics is equivalent to exponential weak spatial mixing of this specification in arbitrary finite volumes of $\mathbb{Z}^2$ under arbitrary exterior conditions, so that the specification has exactly one DLR state, the stationary trajectory law, with exponentially decaying correlations. This answers in one dimension, under exponential ergodicity, the question of Lebowitz, Maes and Speer whether every Gibbs measure of the space–time interaction is a trajectory law of the PCA, previously known for periodic measures. In every dimension and with no rate, the relative-entropy defect of any Gibbs measure from the dynamics is a surface term; hence for an ergodic PCA the stationary trajectory is the only uniformly recurrent Gibbs measure, the translation action on the Gibbs simplex is uniquely ergodic, and all-DLR uniqueness holds exactly when every Gibbs measure is uniformly recurrent. The forward proof removes the far future boundary from Bérard's coupling from the past at an entropy cost that only one-dimensional geometry absorbs. Finite certificates for the hypothesis are exactly computable; for the noisy majority rule they give a unique space–time Gibbs state down to noise 0.485, including noise one half, and Marsan, Sablik and Törmä's fixed radius-one automaton has one space–time Gibbs state at small noise (granting structural estimates from their low-noise proof) and at large noise, and several in between.
+
+## What the paper proves
+
+A probabilistic cellular automaton (PCA) updates every cell of a row at once. Each cell picks its next state at random, from one fixed table that reads a few neighbouring cells of the previous row. Recording a run row by row gives a random picture with one more dimension, time. The transition probabilities also define an equilibrium system on that picture, the space-time Gibbs specification, which treats the future rows as a boundary condition exactly like the past rows and the sides. The paper asks when this equilibrium system has no states other than the one the dynamics produces. Throughout, the alphabet and the radius are finite and every table entry is positive.
+
+- **Theorem A (Theorem 3.1), one dimension.** A PCA on the line forgets its initial row exponentially fast, uniformly (uniform exponential ergodicity), exactly when its space-time specification mixes exponentially in every finite volume of the plane, whatever is fixed outside the volume, the future included. The specification then has exactly one Gibbs (DLR) state, the law of the stationary run, and its correlations decay exponentially.
+- **Theorem B (Proposition 9.1, Theorems 9.2, 10.3 and 10.10, Corollary 10.12), every dimension.** Exponential mixing of the specification implies uniform exponential ergodicity, and a unique Gibbs state alone implies uniform local convergence of the dynamics, without a rate. For every Gibbs state, the relative-entropy defect from the forward dynamics in a finite volume is at most log(1/p₋) times the number of exterior children of the volume, where p₋ is the least table entry: a surface term. Hence, for an ergodic PCA, the stationary run is the only uniformly recurrent Gibbs state, the translation action on the Gibbs states is uniquely ergodic, and the Gibbs state is unique exactly when every Gibbs state is uniformly recurrent.
+- **Theorem C (Propositions 4.1 to 4.4).** Finite certificates, polynomial inequalities that are exactly computable in rational arithmetic, imply the hypothesis of Theorem A.
+- **Theorem D (Section 11), examples on the line.** Every radius-r rule with uniform noise above 1 − 1/(2r+1), and the noisy shift at every positive noise, have a unique space-time Gibbs state. For the noisy majority rule, depth-seven certificates give a unique space-time Gibbs state at noise 1/2 and at noise 0.485 (Table 2); above noise 1/2 the same conclusion follows from the high-noise bound of Lebowitz, Maes and Speer combined with Theorems A and C.
+- **Theorem E (Section 11.5).** The fixed radius-one automaton of Marsan, Sablik and Törmä, perturbed by uniform noise, has one space-time Gibbs state at small noise (granting structural estimates from their low-noise proof, which the paper does not re-derive) and at large noise, and several at some noise in between.
+
+In one dimension the paper also shows that the Dobrushin-Shlosman block conditions for the space-time specification and the past-only conditions of Maes and Shlosman hold for the same positive tables (Proposition 12.2, Corollary 12.3). Together these results partially answer Problems 2 and 4 of Lebowitz, Maes and Speer (1990).
+
+The proofs build on prior work that the paper's "Credit" section attributes in detail: the translation-invariant correspondence of Goldstein, Kuik, Lebowitz and Maes; Bérard's coupling from the past for exponentially ergodic one-dimensional PCA; the constructive ergodicity criteria of Maes and Shlosman; Halawi's proof that ergodic positive PCA are uniformly ergodic; and, on the equilibrium side, the theorems of Dobrushin and Shlosman and of Martinelli, Olivieri and Schonmann.
+
+## Contents and reproduction
+
+- `paper/main.pdf`: manuscript, 41 pages.
+- `SHA256SUMS`: SHA-256 hashes for every shipped repository file except this root manifest; paths are relative and the manifest uses LF line endings. Check with `sha256sum -c SHA256SUMS` from the repository root.
+- `paper/`: LaTeX source (one file, with an inline bibliography), plain-text abstract and strict build driver. Run `python -B build.py` there with pdflatex installed. Its default creates a new system temporary directory; `--build-dir` selects a new or empty directory. The build disables shell escape, runs pdflatex three times and rejects warnings, unresolved references and box defects. See `paper/README.txt`.
+- `verification/`: the program behind Table 2, `code/majority_certificates.py` (Python 3 with NumPy and SymPy), its recorded outputs and `code/SHA256SUMS`, and `independent/table2_check.py`, a separate program that re-derives every entry of Table 2 by an exact integer transfer over the light cone. Start with `verification/VERIFY.md`. `cd verification/code && sha256sum -c SHA256SUMS` checks the recorded files in seconds; `cd verification/independent && python -B table2_check.py` re-derives the table in seconds; recomputing it with the first program takes 12 to 20 minutes.
+
+No proof in the paper uses a computation. The program certifies the entries of Table 2 in exact rational arithmetic; the theorems rest on the written proofs and the cited results.
+
+## Citation and rights
+
+See `CITATION.cff` for citation metadata.
+Paper and documentation: CC BY 4.0. Scripts: MIT or Apache 2.0, at your option. See `RIGHTS.md`, the license files and `NOTICE`.
