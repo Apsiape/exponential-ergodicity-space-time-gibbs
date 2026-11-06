@@ -1,6 +1,6 @@
 # Exponential ergodicity and the space-time Gibbs states of one-dimensional probabilistic cellular automata
 
-Seth Douglas and Nidhal Mghirbi. Version 1.1.0, November 2026.
+Seth Douglas and Nidhal Mghirbi. Version 1.1.0, November 2026. DOI: [10.5281/zenodo.24023364](https://doi.org/10.5281/zenodo.24023364). Concept DOI (all versions): [10.5281/zenodo.24023363](https://doi.org/10.5281/zenodo.24023363).
 
 **This is a preprint. It has not been peer reviewed.**
 
