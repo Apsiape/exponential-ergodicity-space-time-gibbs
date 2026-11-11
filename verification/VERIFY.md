@@ -1,9 +1,14 @@
-# Verification: Exponential ergodicity and the space–time Gibbs states of one-dimensional PCA (version 1.1.0)
+# Verification: Exponential ergodicity and the space–time Gibbs states of one-dimensional PCA (version 1.2.0)
 
-Everything computational in the paper is Table 2 (Section 11.3, noisy majority certificates) and the
-three polynomials q_1, q_2, q_3 quoted there. No proof uses a computation. This directory reproduces
-every number in that table in exact rational arithmetic, with two independent programs, and checks the
+The computational content of the paper is Table 2 (Section 11.3, noisy majority certificates) with the
+three polynomials q_1, q_2, q_3 quoted there, and, since version 1.2.0, the checks described in
+`v1.2/VERIFY.md` for Sections 11.6 and 13. No proof uses a computation. This directory reproduces
+every number in Table 2 in exact rational arithmetic, with two independent programs, and checks the
 recorded outputs by hash.
+
+## Added in version 1.2.0
+- v1.2/: checks of the critical example (Section 11.6) and of the prefix-cap theorem (Section 13):
+  three programs, their recorded outputs and resource receipts. Start with `v1.2/VERIFY.md`.
 
 ## Contents
 - code/majority_certificates.py           the program that produced Table 2 (Python 3; needs sympy and numpy)
@@ -62,7 +67,8 @@ polynomials and the analytic high-noise bound at sample noises. It needs SymPy a
 Every check passes on the shipped files.
 
 ## Not computational
-Everything else in the paper is proved in the text. The defect bound of Section 10 (Theorem 10.3)
+Everything else in the paper is proved in the text; the checks in `v1.2/` support proofs and are not
+part of them. The defect bound of Section 10 (Theorem 10.3)
 was also tested numerically on every subset of small space–time windows, as "How this work was
 done" in the paper describes; that test is a sanity check, not a certificate, and is not part of
 this package.

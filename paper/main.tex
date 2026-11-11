@@ -2,11 +2,12 @@
 %  Exponential ergodicity and the space-time Gibbs states of
 %  one-dimensional probabilistic cellular automata
 %  Seth Douglas and Nidhal Mghirbi
-%  Version 1.1.0, November 2026
+%  Version 1.2.0, November 2026
 %
 %  Build: python -B build.py (three pdflatex passes; see README.txt)
 %  The numbers in Section 11.3 are produced by verification/code/majority_certificates.py;
 %  its recorded output is verification/code/majority_certificates_output.txt.
+%  The checks of Sections 11.6 and 13 added in version 1.2.0 are in verification/v1.2/.
 % =====================================================================
 \documentclass[11pt]{article}
 \usepackage[a4paper,margin=27mm,top=28mm,bottom=30mm]{geometry}
@@ -44,6 +45,8 @@
 \newtheorem*{mainC}{Theorem C}
 \newtheorem*{mainD}{Theorem D}
 \newtheorem*{mainE}{Theorem E}
+\newtheorem*{mainF}{Theorem F}
+\newtheorem*{mainG}{Theorem G}
 
 \newcommand{\A}{\mathcal{A}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -76,14 +79,14 @@
 \hypersetup{pdftitle={Exponential ergodicity and the space-time Gibbs states of one-dimensional probabilistic cellular automata},pdfauthor={Seth Douglas and Nidhal Mghirbi}}
 \title{\vspace{-1.2cm}\LARGE Exponential ergodicity and the space--time Gibbs states\\ of one-dimensional probabilistic cellular automata}
 \author{Seth Douglas \and Nidhal Mghirbi}
-\date{\small Version 1.1.0, November 2026}
+\date{\small Version 1.2.0, November 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
 \noindent
-A positive-rate probabilistic cellular automaton (PCA) defines a Gibbs specification in one more dimension, its space--time interaction, in which the future is a boundary like the past and the sides. For finite-alphabet, finite-radius, strictly positive PCA on~$\Z$ we prove that uniform exponential ergodicity of the dynamics is equivalent to exponential weak spatial mixing of this specification in arbitrary finite volumes of~$\Z^2$ under arbitrary exterior conditions, so that the specification has exactly one DLR state, the stationary trajectory law, with exponentially decaying correlations. This answers in one dimension, under exponential ergodicity, the question of Lebowitz, Maes and Speer whether every Gibbs measure of the space--time interaction is a trajectory law of the PCA, previously known for periodic measures. In every dimension and with no rate, the relative-entropy defect of any Gibbs measure from the dynamics is a surface term; hence for an ergodic PCA the stationary trajectory is the only uniformly recurrent Gibbs measure, the translation action on the Gibbs simplex is uniquely ergodic, and all-DLR uniqueness holds exactly when every Gibbs measure is uniformly recurrent. The forward proof removes the far future boundary from B\'erard's coupling from the past at an entropy cost that only one-dimensional geometry absorbs. Finite certificates for the hypothesis are exactly computable; for the noisy majority rule they give a unique space--time Gibbs state down to noise $0.485$, including noise one half, and Marsan, Sablik and T\"orm\"a's fixed radius-one automaton has one space--time Gibbs state at small noise (granting structural estimates from their low-noise proof) and at large noise, and several in between.
+A positive-rate probabilistic cellular automaton (PCA) defines a Gibbs specification in one more dimension, its space--time interaction, in which the future is a boundary like the past and the sides. For finite-alphabet, finite-radius, strictly positive PCA on~$\Z$ we prove that uniform exponential ergodicity of the dynamics is equivalent to exponential weak spatial mixing of this specification in arbitrary finite volumes of~$\Z^2$ under arbitrary exterior conditions, so that the specification has exactly one DLR state, the stationary trajectory law, with exponentially decaying correlations. This answers in one dimension, under exponential ergodicity, the question of Lebowitz, Maes and Speer whether every Gibbs measure of the space--time interaction is a trajectory law of the PCA, previously known for periodic measures. The forward proof removes the far future boundary from B\'erard's coupling from the past at an entropy cost that only one-dimensional geometry absorbs. In every dimension, cutting the cluster of coupling failures at a late level, where its accumulated size dominates its width, removes the future boundary whenever the dynamics has a coalescing local flow satisfying the quantitative small-badness hypothesis of the prefix-cap theorem. In particular, if some basic i.i.d.\ random-map representation coalesces exponentially for all inputs at once, the specification has exactly one DLR state and exponential weak mixing in arbitrary volumes, and for attractive binary PCA in every dimension uniform exponential ergodicity is equivalent to exponential weak mixing. In every dimension and with no rate, the relative-entropy defect of any Gibbs measure from the dynamics is a surface term; hence for an ergodic PCA the stationary trajectory is the only uniformly recurrent Gibbs measure, the translation action on the Gibbs simplex is uniquely ergodic, and all-DLR uniqueness holds exactly when every Gibbs measure is uniformly recurrent. Finite certificates for the hypothesis are exactly computable; for the noisy majority rule they give a unique space--time Gibbs state down to noise $0.485$, including noise one half, and Marsan, Sablik and T\"orm\"a's fixed radius-one automaton has one space--time Gibbs state at small noise (granting structural estimates from their low-noise proof) and at large noise, and several in between. Finally, as an explicit witness of a classical phenomenon, the synchronous heat-bath dynamics of the anisotropic Ising model at critical couplings is a positive PCA on $\Z^2$ with a rational table that is uniformly ergodic but not exponentially ergodic: granting two classical exact formulas for the Ising model, the largest distance between the laws of one site at time $t$ from two initial rows is at least $\frac14(t+1)^{-1/8}$.
 \end{abstract}
 \begin{center}\small AI systems assisted with this work. The authors take responsibility for its claims; see ``How this work was done.'' This preprint has not been peer reviewed.\end{center}
 \begin{center}\small Programs and finite checks: \url{https://github.com/Apsiape/exponential-ergodicity-space-time-gibbs}.\end{center}
@@ -105,16 +108,16 @@ translated over the lattice. When every entry of the table is positive this is a
 
 The correspondence between the dynamics and this equilibrium system is classical in the translation-invariant setting. Goldstein, Kuik, Lebowitz and Maes \cite{GKLM89} identify the stationary laws of the PCA that are invariant under spatial translations with the Gibbs measures of $\Phi$ that are invariant under every space--time translation; Lebowitz, Maes and Speer \cite{LMS90} develop the statistical mechanics of PCA on this basis. Their identification says nothing about Gibbs measures that are not translation invariant, and in particular nothing about the finite-volume conditional laws with an arbitrary future boundary, which are the objects one must control to prove that a specification has only one Gibbs state.
 
-This paper proves that in one spatial dimension the dynamics controls every boundary, and in every dimension it bounds how far any Gibbs measure can be from the dynamics.
+This paper proves that in one spatial dimension the dynamics controls every boundary, that in every dimension it does so whenever it admits a coalescing local flow satisfying \cref{def:flow} and the smallness condition \eqref{eq:taud}, and that in every dimension it bounds how far any Gibbs measure can be from the dynamics.
 
 \paragraph{What is settled.} Two of the open problems listed by Lebowitz, Maes and Speer \cite[Section~6.6]{LMS90} concern the questions treated here, and a third question was raised by Marcovici, Sablik and Taati \cite[Section~2.2]{MSTaati19}.
 \begin{itemize}
-\item \emph{Is every Gibbs measure of the space--time interaction a Markov chain measure of the PCA?} (LMS, Problem~2; known for translation-invariant and periodic measures \cite{GKLM89}.) Yes in one dimension under uniform exponential ergodicity, for every Gibbs measure and every boundary (\cref{thm:main}); yes in every dimension for every uniformly recurrent Gibbs measure (\cref{thm:recurrent}). What remains open is a Gibbs measure that is not uniformly recurrent: for an ergodic PCA in $d\ge2$ (\cref{cor:allDLR}, \cref{prob:higher}), for an ergodic PCA on $\Z$ without an exponential rate, if one exists (\cref{rem:notexcluded}, \cref{prob:rate}), and for a non-ergodic PCA in any dimension.
-\item \emph{Is there a family of finite-volume conditions, like the Dobrushin--Shlosman conditions $C_V$ but involving only the dependence on spins in the past of~$V$, that characterizes the uniqueness region completely?} (LMS, Problem~4.) On the dynamical side Maes and Shlosman \cite{MS91} introduced the conditions $C_{N,R}$ on finite space--time trapezoids and proved that they imply exponential ergodicity. For positive PCA in one dimension these conditions are also necessary under \eqref{eq:uee}, by \cref{prop:past-certificate}, which uses B\'erard's uniform triangular coupling \cite[Lemma~8]{Berard23}; B\'erard's finite-size criterion \cite[eq.~(5)]{Berard23} is another characterization. What this paper adds is the equilibrium side: in one dimension the region of all-DLR uniqueness with exponential mixing is exactly the region of exponential ergodicity of the dynamics (\cref{thm:main}), so these dynamical conditions characterize it (\cref{cor:ds-ms}); it contains an open set of positive weights on the fixed supports (\cref{thm:equilibrium}), and \cref{sec:certificates} gives elementary sufficient conditions that are exactly computable. In $d=1$ the question left is whether uniqueness can hold with sub-exponential ergodicity (\cref{prob:rate}); in $d\ge2$ the forward implication is open (\cref{prob:higher}), and necessity of $C_{N,R}$ is not established here.
+\item \emph{Is every Gibbs measure of the space--time interaction a Markov chain measure of the PCA?} (LMS, Problem~2; known for translation-invariant and periodic measures \cite{GKLM89}.) Yes in one dimension under uniform exponential ergodicity, for every Gibbs measure and every boundary (\cref{thm:main}); yes in every dimension when the PCA admits a coalescing local flow satisfying \cref{def:flow} and \eqref{eq:taud} (\cref{thm:prefix}), in particular when some basic random-map representation coalesces exponentially for all inputs at once (\cref{cor:basic}), which holds for every attractive binary PCA that is uniformly exponentially ergodic (\cref{cor:attractive}); and yes in every dimension for every uniformly recurrent Gibbs measure (\cref{thm:recurrent}). What remains open is a Gibbs measure that is not uniformly recurrent: for an exponentially ergodic PCA in $d\ge2$ without such a flow, if one exists (\cref{cor:allDLR}, \cref{prob:higher}); for an ergodic PCA without an exponential rate, which exists on $\Z^2$ (\cref{thm:critical}) and is not known to exist on $\Z$ (\cref{rem:notexcluded}, \cref{prob:rate}); and for a non-ergodic PCA in any dimension.
+\item \emph{Is there a family of finite-volume conditions, like the Dobrushin--Shlosman conditions $C_V$ but involving only the dependence on spins in the past of~$V$, that characterizes the uniqueness region completely?} (LMS, Problem~4.) On the dynamical side Maes and Shlosman \cite{MS91} introduced the conditions $C_{N,R}$ on finite space--time trapezoids and proved that they imply exponential ergodicity. For positive PCA in one dimension these conditions are also necessary under \eqref{eq:uee}, by \cref{prop:past-certificate}, which uses B\'erard's uniform triangular coupling \cite[Lemma~8]{Berard23}; B\'erard's finite-size criterion \cite[eq.~(5)]{Berard23} is another characterization. What this paper adds is the equilibrium side: in one dimension the region of all-DLR uniqueness with exponential mixing is exactly the region of exponential ergodicity of the dynamics (\cref{thm:main}), so these dynamical conditions characterize it (\cref{cor:ds-ms}); it contains an open set of positive weights on the fixed supports (\cref{thm:equilibrium}), and \cref{sec:certificates} gives elementary sufficient conditions that are exactly computable. In $d=1$ the question left is whether uniqueness can hold with sub-exponential ergodicity (\cref{prob:rate}); in $d\ge2$ all-DLR uniqueness is proved under a coalescing local flow satisfying \eqref{eq:taud}, with exponential weak mixing under all-input coalescence of a basic representation (\cref{sec:higher}); the forward implication is open in general (\cref{prob:higher}), and necessity of $C_{N,R}$ is not established here.
 \item \emph{Is every ergodic PCA uniformly ergodic?} (Marcovici, Sablik and Taati's conjecture \cite[Section~2.2]{MSTaati19}.) For positive rates, yes, by Halawi's Baire-category argument \cite{Halawi22}, which is not ours; we reproduce it (\cref{prop:halawi}) because it is what lets the dimension-free results rest on bare ergodicity.
 \end{itemize}
 
-\paragraph{What is new beyond that.} The equivalence of exponential ergodicity with exponential weak mixing under arbitrary future boundaries, in one dimension (\cref{thm:main}); the surface bound on the relative-entropy defect of any Gibbs measure (\cref{thm:defect}); unique ergodicity of the translation action on the Gibbs simplex of an ergodic PCA, with the stationary trajectory as its only uniformly recurrent point (\cref{thm:simplex}); the characterization of all-DLR uniqueness as ergodicity plus uniform recurrence of every Gibbs measure (\cref{cor:allDLR}); the placement of ergodicity of rational positive PCA at $\Pi^0_2$ (\cref{rem:pi2}); the exact certificates for the noisy majority rule at and below noise one half (\cref{sec:majority}); and the reentrant fixed family (\cref{sec:mst}), conditional on the structural inputs of \cite{MST26}. We also show that in one dimension the Dobrushin--Shlosman block conditions for the space--time specification and the past-only conditions $C_{N,R}$ of Maes and Shlosman hold in the same region of positive PCA tables (\cref{cor:ds-ms}); the direction from the block conditions to $C_{N,R}$ rests on \cref{prop:past-certificate}, which derives $C_{N,R}$ from uniform exponential ergodicity using B\'erard's triangular coupling \cite[Lemma~8]{Berard23}.
+\paragraph{What else is proved here.} The equivalence of exponential ergodicity with exponential weak mixing under arbitrary future boundaries, in one dimension (\cref{thm:main}); the prefix-cap theorem, which removes an arbitrary future boundary in every dimension given a coalescing local flow satisfying \cref{def:flow} and the smallness condition \eqref{eq:taud} (\cref{thm:prefix}), with all-DLR uniqueness and exponential weak mixing under all-input coalescence of a basic representation (\cref{cor:basic}) and, for attractive binary PCA, the equivalence of \cref{thm:main} in every dimension (\cref{cor:attractive}); an explicit rational positive PCA on $\Z^2$ that is uniformly ergodic but not exponentially ergodic, with an explicit lower bound (\cref{thm:critical}), an explicit witness of a classical phenomenon that rests on two classical exact formulas for the Ising model; the surface bound on the relative-entropy defect of any Gibbs measure (\cref{thm:defect}); unique ergodicity of the translation action on the Gibbs simplex of an ergodic PCA, with the stationary trajectory as its only uniformly recurrent point (\cref{thm:simplex}); the characterization of all-DLR uniqueness as ergodicity plus uniform recurrence of every Gibbs measure (\cref{cor:allDLR}); the placement of ergodicity of rational positive PCA at $\Pi^0_2$ (\cref{rem:pi2}); the exact certificates for the noisy majority rule at and below noise one half (\cref{sec:majority}); and the reentrant fixed family (\cref{sec:mst}), conditional on the structural inputs of \cite{MST26}. We also show that in one dimension the Dobrushin--Shlosman block conditions for the space--time specification and the past-only conditions $C_{N,R}$ of Maes and Shlosman hold in the same region of positive PCA tables (\cref{cor:ds-ms}); the direction from the block conditions to $C_{N,R}$ rests on \cref{prop:past-certificate}, which derives $C_{N,R}$ from uniform exponential ergodicity using B\'erard's triangular coupling \cite[Lemma~8]{Berard23}.
 
 \subsection{Results}
 
@@ -147,7 +150,15 @@ Every radius-$r$ rule perturbed by uniform noise $\eps>1-1/(2r+1)$ has a unique 
 Let $T$ be the fixed radius-one automaton of Marsan, Sablik and T\"orm\"a \cite{MST26}, and $p_\eps$ its perturbation by uniform noise $\eps$. Under the structural estimates of their low-noise proof, stated in \cref{sec:mst}, there is $\eps_0>0$ such that for every $0<\eps<\eps_0$ and every $2/3<\eps\le1$ the space--time specification of $p_\eps$ has a unique DLR state with exponential weak mixing, while at some intermediate noise it has several DLR states. The alphabet and the four-site interaction support are the same throughout.
 \end{mainE}
 
-\begin{table}[t]
+\begin{mainF}[\cref{thm:prefix,cor:basic,cor:attractive}]
+In every spatial dimension $d\ge1$, if a strictly positive PCA admits a coalescing local flow satisfying \cref{def:flow} and the smallness condition \eqref{eq:taud}, then its space--time specification has exactly one DLR state, the stationary trajectory law. If a basic i.i.d.\ random-map representation of the PCA coalesces exponentially for all inputs at once, the specification moreover has exponential weak spatial mixing in arbitrary finite volumes. For an attractive PCA with two symbols this holds exactly when the PCA is uniformly exponentially ergodic.
+\end{mainF}
+
+\begin{mainG}[\cref{thm:critical}]
+The synchronous heat-bath dynamics of the Ising model on $\Z^2$ at the critical couplings with $e^{2J_h}=3$ and $e^{2J_v}=2$ is a strictly positive PCA with nine rational table entries. Granting two classical exact formulas for the Ising model in its low-temperature phase, it is uniformly ergodic, and for every $t\ge0$ the largest total-variation distance between the laws of one site at time $t$ from two initial rows is at least $\frac14(t+1)^{-1/8}$; so it is not exponentially ergodic. This is an explicit witness of a classical phenomenon, slow relaxation at a critical point.
+\end{mainG}
+
+\begin{table}[tp]
 \centering\small
 \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.27\textwidth} X >{\raggedright\arraybackslash}p{0.2\textwidth}@{}}
 \toprule
@@ -159,7 +170,9 @@ The defect bound, every dimension & The relative-entropy defect of any DLR state
 Finite certificates & $(2rL+1)\theta_L<1$ or $(2rL+1)q_L<1$ implies the hypothesis; both exactly computable; equal on a binary alphabet when every map of the representation is monotone. & \cref{sec:certificates}\\[3pt]
 Noisy majority & Unique space--time Gibbs state at every noise above $1/2$ (via the high-noise bound of \cite{LMS90}), and at $1/2$ and $0.485$ (depth-seven certificates). & \cref{sec:majority}\\[3pt]
 A reentrant fixed family & The MST automaton: one DLR state at small noise (granting structural estimates from the low-noise proof of \cite{MST26}) and at large noise, several in between, on one four-site support. & \cref{sec:mst}\\[3pt]
-Equilibrium consequences & Dobrushin--Shlosman block certificate; strong mixing on squares; an open uniqueness region in positive weights on fixed supports. & \cref{sec:equilibrium}\\
+A critical example & The critical anisotropic Ising heat bath on $\Z^2$, a rational positive PCA: uniformly ergodic, one-site distance at least $\frac14(t+1)^{-1/8}$ (given two classical Ising formulas). & \cref{sec:critical}\\[3pt]
+Equilibrium consequences & Dobrushin--Shlosman block certificate; strong mixing on squares; an open uniqueness region in positive weights on fixed supports. & \cref{sec:equilibrium}\\[3pt]
+Every dimension, under coalescence & A late cut removes the future boundary given a coalescing local flow satisfying \cref{def:flow} and \eqref{eq:taud}: all-DLR uniqueness. With all-input coalescence of a basic representation, also exponential weak mixing; for attractive binary PCA, exponential ergodicity $\Leftrightarrow$ exponential weak mixing. & \cref{sec:higher}\\
 \bottomrule
 \end{tabularx}
 \caption{Results at a glance.}
@@ -180,8 +193,9 @@ The proof removes the cap by a combination of three ideas.
 \begin{enumerate}
 \item \emph{Coalescence.} B\'erard \cite{Berard23} proves that an exponentially ergodic positive PCA on $\Z$ admits a local coupling-from-the-past flow, built from independent couplings of complete histories on triangular tiles, whose composition over $m$ tiles becomes constant in the initial row except with probability exponentially small in $m$. A root site influences the terminal row of an expanding volume only through a \emph{cluster} of tiles on which this coalescence failed.
 \item \emph{Resampling on a fixed cluster.} For a fixed candidate cluster, replacing the coupling seeds on it by independent copies changes the terminal row only near the cluster's last level, so the cap likelihood changes by at most an exponential in the number of terminal cells of the cluster, while the probability that the candidate is bad is an exponential in its total size. The replacement field has the original law and is independent of the badness event, which is what makes the comparison a bound on the actual, cap-tilted law rather than on the forward law.
-\item \emph{Entropy against the cap, with a harmonic gain.} The number of connected candidates of a given size is exponential in the size; the badness probability can be made as small as one likes by taking long tiles; and the cap cost, an exponential in the \emph{terminal} size $d$ of the cluster, is absorbed because in one dimension a cluster that reaches $d$ terminal cells has total size at least $d\sum_{\ell<n}(2R\ell+1)^{-1}\asymp d\log n$. This harmonic sum diverges only in one dimension; in $d\ge2$ the corresponding sum converges, and this is where the forward proof stops.
+\item \emph{Entropy against the cap, with a harmonic gain.} The number of connected candidates of a given size is exponential in the size; the badness probability can be made as small as one likes by taking long tiles; and the cap cost, an exponential in the \emph{terminal} size $d$ of the cluster, is absorbed because in one dimension a cluster that reaches $d$ terminal cells has total size at least $d\sum_{\ell<n}(2R\ell+1)^{-1}\asymp d\log n$. This harmonic sum diverges only in one dimension; in $d\ge2$ the corresponding sum converges, and this is where the proof of Theorem~A stops.
 \end{enumerate}
+\Cref{sec:higher} removes the second use of one dimension. It charges the cap not at the last level but at a late level where the size the cluster has accumulated dominates its current width, after integrating the future above that level into a likelihood whose sensitivity to one changed spin does not depend on the time still to come. What remains one-dimensional is the first idea: B\'erard's theorem supplies the coalescing coupling only on~$\Z$.
 
 Once the cap is removed for a single root, the DLR equations identify every Gibbs state as a two-sided trajectory of the PCA, and exponential ergodicity identifies every such trajectory with the stationary one. Weak mixing in an arbitrary volume then follows by running the same comparison with an entire tile as the root and coupling the actual Gibbs sampling, tile by tile, to a stationary reference evolved with the same coupling tables.
 
@@ -192,13 +206,17 @@ The identification of translation-invariant stationary PCA laws with fully trans
 
 Maes and Shlosman \cite{MS91} gave dynamical analogues of the Dobrushin--Shlosman conditions, of the kind that Problem~4 of \cite{LMS90} asks for. Their condition $C_{N,R}$ asks for couplings, on the trapezoids of an admissible covering of a space--time strip of height~$N$, of the conditional laws given two configurations on the base of the trapezoid; it yields exponential ergodicity by contraction of the variational seminorm \cite[Section~3, Main Theorem]{MS91}. Maes and Shlosman also state a converse under exponential convergence with a constant proportional to the total single-site oscillation of the observable \cite[Theorem~2]{MS91}, and a criterion involving convergence faster than $n^{-d}$ \cite[Corollary~3]{MS91}.\footnote{The proof of \cite[Theorem~2, pp.~242--243]{MS91} extends a coupling of the terminal rows to the whole trapezoid without showing that, for base configurations differing at a single site, the two histories agree outside the forward cone of that site, including below the terminal row; these agreements are needed for their eq.~(3-3) with the coefficients chosen below the terminal row, and for the light-cone count in their eq.~(3-16). Their Corollary~3 uses the same estimate. Its little-$o$ hypothesis also requires a uniform interpretation: pointwise in the initial pair and the finite cube it is satisfied by deterministic translation, which is not ergodic.} For positive PCA on $\Z$, \cref{prop:past-certificate} proves necessity of $C_{N,R}$ directly from \eqref{eq:uee}, using B\'erard's boundary-uniform coupling \cite[Lemma~8]{Berard23}. Maes and Shlosman also observe that the Dobrushin--Shlosman condition for the space--time interaction implies uniqueness of the invariant measure \cite[p.~235]{MS91}; \cref{prop:wsm-to-erg} strengthens this to uniform exponential ergodicity under weak mixing alone. The single-site coupling criterion of \cite[Theorem~C]{MS93} is a simpler form of the same method: its influence coefficients vanish outside the light cone and are bounded by $\theta_L$ inside it, so the finite-alphabet certificate below is an elementary form of their method, and we claim no novelty for it. Their application to equilibrium \cite[Section~4, Example~3]{MS91} concerns a spatial Gibbs measure made invariant by a reversible, sublattice-updating dynamics, for which $C_{N,R}$ can hold where $C_V$ fails for every~$V$; that measure is a different object from an arbitrary DLR state of the normalized space--time interaction, which \cite{MS91} treats only through the fact, cited from \cite{GKLM89}, that the space--time measure of a stationary law is Gibbs \cite[p.~234]{MS91}. The implication proved here takes bare exponential ergodicity as its hypothesis, uses no constructive criterion, and controls every DLR state in every finite volume under arbitrary future and lateral conditions. Relative to \cite{MS91,MS93} we make no priority claim beyond that statement.
 
-B\'erard's construction \cite{Berard23} is the probabilistic input of the forward proof, and we use it exactly as stated in \cref{prop:berard}: the local flow, the couplings of complete histories on tiles, and the exponential coalescence of their composition. The finite-volume adapter, the cap comparison, the identification of all DLR states and the whole-tile chain-rule coupling are proved here. B\'erard's later example \cite{Berard22}, an ergodic positive-rate PCA that admits no successful basic i.i.d.\ single-site coupling, is the reason the general proof works with whole-history tiles and not with the basic single-site maps: exponential ergodicity must not be replaced by coalescence of a given representation.
+B\'erard's construction \cite{Berard23} is the probabilistic input of the forward proof, and we use it exactly as stated in \cref{prop:berard}: the local flow, the couplings of complete histories on tiles, and the exponential coalescence of their composition. The finite-volume adapter, the cap comparison, the identification of all DLR states and the whole-tile chain-rule coupling are proved here. B\'erard's later example \cite{Berard22}, a positive-rate PCA on $\Z$ that is uniformly exponentially ergodic \cite[Proposition~1]{Berard22} and yet, at small flip probability, admits no successful basic i.i.d.\ nearest-neighbour coupling \cite[Theorem~1]{Berard22}, is the reason the general proof works with whole-history tiles and not with the basic single-site maps: exponential ergodicity must not be replaced by coalescence of a given representation.
+
+For higher dimensions (\cref{sec:higher}) the relevant prior results are of two kinds. Uniqueness among translation-invariant space--time Gibbs states follows in every dimension from the correspondence of \cite{GKLM89,LMS90} together with ergodicity, and also from van den Berg and Steif's theorem that a positive ergodic Markov random field which is a finitary factor of an i.i.d.\ process shares its specification with no other ergodic Markov random field \cite[Theorem~2.1]{vdBS99}. For monotone exponentially ergodic PCA they code the stationary row law, a random field on the spatial lattice, as a finitary factor of an i.i.d.\ process by a Propp--Wilson scheme \cite[Theorem~3.4]{vdBS99}, \cite{PW96}. The space--time coding of the stationary trajectory law, to which their Theorem~2.1 would be applied here, is a different object: for a basic representation that coalesces for all inputs it is obtained by coupling from the past at every space--time target, with the finite-valued local maps as seeds. Coupling from the past for PCA is developed by Bu\v{s}i\'c, Mairesse and Marcovici \cite{BMM13}. Uniqueness among all DLR states, with exponential weak mixing, follows in every dimension from Dobrushin's condition \cite{Dob68} or the Dobrushin--Shlosman criterion \cite{DS85,Weitz05} applied to the space--time specification, which covers high noise; van den Berg and Maes's disagreement percolation \cite{vdBM94} is a further coupling criterion for uniqueness of Markov random fields in any dimension. For spatial Markov random fields, finitary codings and spatial mixing are also related in the opposite direction \cite{HS00,Spinka20}. \Cref{thm:prefix} uses a hypothesis of a different kind, all-input coalescence of a local flow whose badness probability satisfies the smallness condition \eqref{eq:taud}, which does not ask the table to be close to a product kernel, and it controls all DLR states. The sources we checked contain no uniqueness statement for all DLR states, and no arbitrary-volume weak mixing statement, for the space--time specification of a positive PCA in $d\ge2$ outside the Dobrushin and Dobrushin--Shlosman regimes.
+
+The critical example of \cref{sec:critical} is an explicit witness of a classical phenomenon, slow relaxation at a critical point \cite{Holley85,MS93,LS12}, for the synchronous heat-bath dynamics of the Ising model \cite{KV80,DLR02,CNP01}; its inputs are classical exact formulas for the two-dimensional Ising model \cite{Yang52,Chang52,MPW63,MW73}.
 
 On the equilibrium side we use the Dobrushin--Shlosman constructive criterion \cite{DS85}, its block-coupling presentation as developed by Weitz \cite{Weitz05}, and, in two dimensions, the theorem of Martinelli, Olivieri and Schonmann that weak mixing implies strong mixing \cite{MOS94}, which turns the conclusion of \cref{thm:main} into an open uniqueness region in the space of positive weights on the fixed supports. The reentrant automaton is Marsan, Sablik and T\"orm\"a's \cite{MST26}; the noisy-nilpotency and rapid-forgetting results we mention are in \cite{MSTaati19,MT26}.
 
 \subsection{Reading guide}
 
-\Cref{sec:setting} fixes the definitions and proves that PCA trajectories are DLR states in every dimension. \Cref{sec:results} states the main theorem. \Cref{sec:certificates} gives the finite certificates. \Cref{sec:coupling,sec:cap,sec:dlr,sec:wsm} prove the forward implication of \cref{thm:main}: the coupling input and its clipping (\cref{sec:coupling}), the cap comparison (\cref{sec:cap}), the identification of all DLR states (\cref{sec:dlr}), and weak mixing with clustering (\cref{sec:wsm}). \Cref{sec:converse} proves the converses in every dimension, and \cref{sec:defect} proves the defect bound and what follows from it in every dimension without a rate. \Cref{sec:examples} contains the examples, including the exact computations and the reentrant family. \Cref{sec:equilibrium} draws the classical equilibrium consequences, \cref{sec:discussion} discusses the boundaries of the result and the open problems, and the closing sections record credit, how the work was done, its verification status and the reproducibility package. A reader who wants only the mechanism can read \cref{sec:why}, \cref{sec:setting} and \cref{sec:cap}.
+\Cref{sec:setting} fixes the definitions and proves that PCA trajectories are DLR states in every dimension. \Cref{sec:results} states the main theorem. \Cref{sec:certificates} gives the finite certificates. \Cref{sec:coupling,sec:cap,sec:dlr,sec:wsm} prove the forward implication of \cref{thm:main}: the coupling input and its clipping (\cref{sec:coupling}), the cap comparison (\cref{sec:cap}), the identification of all DLR states (\cref{sec:dlr}), and weak mixing with clustering (\cref{sec:wsm}). \Cref{sec:converse} proves the converses in every dimension, and \cref{sec:defect} proves the defect bound and what follows from it in every dimension without a rate. \Cref{sec:examples} contains the examples, including the exact computations, the reentrant family, and a critical PCA on $\Z^2$ that is uniformly ergodic but not exponentially ergodic (\cref{sec:critical}). \Cref{sec:equilibrium} draws the classical equilibrium consequences, \cref{sec:higher} proves all-DLR uniqueness in every dimension under a coalescing local flow satisfying \eqref{eq:taud}, with exponential weak mixing for basic flows, \cref{sec:discussion} discusses the boundaries of the result and the open problems, and the closing sections record credit, how the work was done, its verification status and the reproducibility package. A reader who wants only the mechanism can read \cref{sec:why}, \cref{sec:setting} and \cref{sec:cap}.
 
 % =====================================================================
 \section{Setting}
@@ -238,7 +256,7 @@ In \eqref{eq:theta} the two rows are fixed before the innovations are drawn; in 
 
 \begin{remark}[Ergodicity is not coalescence of a given representation]
 \label{rem:berard22}
-B\'erard \cite{Berard22} exhibits a positive-rate PCA on $\Z$ that is ergodic but for which, at suitable parameters, no basic i.i.d.\ nearest-neighbour local-map representation coalesces. For such a PCA every $q_t$ of such a representation stays bounded below. Exponential ergodicity is therefore a property of the table, not of a representation, and the forward proof of \cref{thm:main} never assumes that the single-site maps coalesce.
+B\'erard \cite{Berard22} studies the positive-rate PCA on $\Z$ with alphabet $\{0,1\}$ in which each cell takes the sum modulo~$2$ of its two neighbours and keeps it with probability $p_{\mathrm B}\in(0,1)$, flipping it otherwise. This PCA is uniformly exponentially ergodic: for every initial row, every finite nonempty $A\subset\Z$ and every $t\ge1$, the law of the row on $A$ at time $t$ is within total variation distance $|A|\,\frac12|2p_{\mathrm B}-1|^t$ of the product Bernoulli$(\frac12)$ law \cite[Section~4.1, Proposition~1]{Berard22}, which gives \eqref{eq:uee}. And yet, for $p_{\mathrm B}$ close to $1$, it has no successful basic i.i.d.\ nearest-neighbour coupling \cite[Theorem~1]{Berard22}: for every basic i.i.d.\ nearest-neighbour local-map representation, $q_t$ is bounded below by a positive constant uniformly in $t$. So uniform exponential ergodicity does not by itself yield a coalescing basic representation. Exponential ergodicity is a property of the table, not of a representation, and the forward proof of \cref{thm:main} never assumes that the single-site maps coalesce; it applies to this PCA through B\'erard's whole-history tiles.
 \end{remark}
 
 \subsection{The space--time specification}
@@ -314,7 +332,7 @@ and for bounded observables $f,g$ supported on finite sets $E,F$,
 after enlarging the constants if necessary.
 \end{theorem}
 
-The implication \ref{it:wsm}$\Rightarrow$\ref{it:uee} holds in every spatial dimension (\cref{prop:wsm-to-erg}). The proof of \ref{it:uee}$\Rightarrow$\ref{it:wsm} occupies \cref{sec:coupling,sec:cap,sec:dlr,sec:wsm}; it uses one spatial dimension twice, in the imported triangular coupling and in a divergent harmonic sum, and it does not establish the forward implication in higher dimensions (\cref{prob:higher}).
+The implication \ref{it:wsm}$\Rightarrow$\ref{it:uee} holds in every spatial dimension (\cref{prop:wsm-to-erg}). The proof of \ref{it:uee}$\Rightarrow$\ref{it:wsm} occupies \cref{sec:coupling,sec:cap,sec:dlr,sec:wsm}; it uses one spatial dimension twice, in the imported triangular coupling and in a divergent harmonic sum. \Cref{sec:higher} replaces the harmonic sum by a late cut that works in every dimension once a coalescing local flow satisfying \eqref{eq:taud} is given (\cref{thm:prefix}); \cref{prob:higher} records what remains open.
 
 % =====================================================================
 \section{Finite certificates for the dynamical hypothesis}
@@ -366,7 +384,7 @@ If the local-map representation has finitely many atoms with rational probabilit
 \end{proposition}
 
 \begin{proof}
-The statements about enumeration are immediate from the finite cone. Nontermination cannot be read as a converse because, by \cref{rem:berard22}, a fixed representation may fail to coalesce for an ergodic table.
+The statements about enumeration are immediate from the finite cone. Nontermination cannot be read as a converse because, by \cref{rem:berard22}, a fixed representation may fail to coalesce for a uniformly exponentially ergodic table.
 \end{proof}
 
 \begin{proposition}[Monotone rules]
@@ -1029,7 +1047,7 @@ For a strictly positive PCA on $\Z^d$ the following are equivalent:
 
 \begin{remark}[What the defect bound does not exclude]
 \label{rem:notexcluded}
-\Cref{cor:allDLR} locates the gap in \cref{prob:higher} precisely: for an ergodic PCA in $d\ge2$, a second DLR state would have to be a boundary-selected state that is not uniformly recurrent, returning to a neighbourhood of itself only along a set of translations with arbitrarily large gaps. Equilibrium statistical mechanics knows such objects: for four-dimensional lattice gauge theories with a finite abelian group at weak coupling, Borgs \cite{Borgs84} proves that the translation-invariant equilibrium state is unique and constructs a second, non-invariant one, carried by a localized magnetic flux tube that starts and ends at infinity. In the opposite direction, Lebowitz and Mazel \cite{LM97} prove that in the Pirogov--Sinai regime uniqueness among translation-periodic Gibbs states implies global uniqueness. The space--time interaction of a positive PCA has zero pressure and no low-temperature structure, so neither the example nor the theorem transfers directly. In $d=1$ under exponential ergodicity such states are excluded by \cref{thm:main}; for an ergodic PCA on $\Z$ that is not exponentially ergodic, if one exists (\cref{prob:rate}), the question is open even in one dimension.
+\Cref{cor:allDLR} locates the gap in \cref{prob:higher} precisely: for an ergodic PCA in $d\ge2$, a second DLR state would have to be a boundary-selected state that is not uniformly recurrent, returning to a neighbourhood of itself only along a set of translations with arbitrarily large gaps. Equilibrium statistical mechanics knows such objects: for four-dimensional lattice gauge theories with a finite abelian group at weak coupling, Borgs \cite{Borgs84} proves that the translation-invariant equilibrium state is unique and constructs a second, non-invariant one, carried by a localized magnetic flux tube that starts and ends at infinity. In the opposite direction, Lebowitz and Mazel \cite{LM97} prove that in the Pirogov--Sinai regime uniqueness among translation-periodic Gibbs states implies global uniqueness. The space--time interaction of a positive PCA has zero pressure and no low-temperature structure, so neither the example nor the theorem transfers directly. In $d=1$ under exponential ergodicity such states are excluded by \cref{thm:main}, and in every dimension they are excluded under the hypotheses of \cref{thm:prefix}. For an ergodic PCA that is not exponentially ergodic the question is open: such PCA exist on $\Z^2$ (\cref{thm:critical}), and whether they exist on $\Z$ is part of \cref{prob:rate}.
 \end{remark}
 
 % =====================================================================
@@ -1182,6 +1200,117 @@ The small-noise statement is \cref{cor:mst-low}; the high-noise statement is \eq
 
 The intermediate parameter is not asserted to be rational, nor is its additional Gibbs state asserted to be translation invariant. ``Reentrant'' describes a one-parameter family of positive interaction weights; the noise parameter has not been identified with an inverse temperature, and the endpoint $\eps=0$ is excluded from the positive-potential result. The rate upgrade in \cref{prop:clocks} is a corollary of the published finite-state, strict-drift, bounded-clock and pathwise-comparison statements, and not a fresh verification of every exploration formula of \cite{MST26}; indexing conventions in that source should be resolved before its exploration rules are treated as an executable specification. None of this qualification concerns the independent cap argument of \cref{sec:cap}, which applies to any PCA already known to satisfy \eqref{eq:uee}.
 
+\subsection{An ergodic PCA on \texorpdfstring{$\Z^2$}{Z\^{}2} that is not exponentially ergodic}
+\label{sec:critical}
+
+Ergodicity without an exponential rate is a classical phenomenon of attractive dynamics at a critical point. Holley studied the possible rates of convergence of attractive spin systems \cite{Holley85}; for attractive binary PCA on $\Z^d$, the criterion of Maes and Shlosman shows that a difference $o(t^{-d})$ between the single-site probabilities started from the all-plus and the all-minus rows already forces exponential convergence \cite[Corollary~2]{MS93}; and Lubetzky and Sly prove that critical Glauber dynamics of the Ising model mixes in polynomial time in finite boxes \cite{LS12}. The synchronous heat-bath dynamics of the Ising model, which is a PCA, has been studied by Kozlov and Vasilyev \cite{KV80}, by Dai Pra, Louis and R\oe lly \cite{DLR02} and by Cirillo, Nardi and Polosa \cite{CNP01}. We record an explicit witness, with a rational table and an explicit lower bound, because \cref{prob:rate} asks whether an intermediate rate can occur at all for positive PCA. It is an explicit witness of a classical phenomenon, and we claim no priority for the phenomenon. The proof is conditional on two classical exact formulas for the Ising model, \ref{I1} and \ref{I2} below; everything else is proved here.
+
+\paragraph{The Ising inputs.} For couplings $J=(J_h,J_v)$ with $J_h,J_v>0$, the nearest-neighbour Ising model on $\Z^2$ is the specification on $\{-1,+1\}^{\Z^2}$ with Boltzmann weights $\exp\sum_x\bigl(J_h\sigma_x\sigma_{x+e_1}+J_v\sigma_x\sigma_{x+e_2}\bigr)$, the inverse temperature being absorbed into the couplings. Let $\mu^+_{L,J}$ be its Gibbs measure on $\Lam_L=\{-L,\dots,L\}^2$ with every spin outside $\Lam_L$ equal to $+1$, and write $\langle\sigma_A\rangle^+_{L,J}$ for the expectation of $\sigma_A=\prod_{x\in A}\sigma_x$, $A$ finite. By Griffiths' inequalities \cite{Gri67,KS68}, applied with the plus boundary condition written as positive fields on the boundary sites of $\Lam_L$, $\langle\sigma_A\rangle^+_{L,J}$ is nonnegative, nondecreasing in $J_h$ and in $J_v$, and nonincreasing in $L$. The limits $\nu^+_J(\sigma_A)=\lim_L\langle\sigma_A\rangle^+_{L,J}=\inf_L\langle\sigma_A\rangle^+_{L,J}$ therefore exist and define the \emph{plus state} $\nu^+_J$, a Gibbs measure of the model. Put $k(J)=(\sinh2J_h\,\sinh2J_v)^{-1}$; the model is critical when $k(J)=1$. We use two exact formulas for the low-temperature phase $k(J)<1$.
+\begin{enumerate}[label=(I\arabic*)]
+\item\label{I1} \emph{Spontaneous magnetization.} If $k(J)<1$, then $\nu^+_J(\sigma_0)=\bigl(1-k(J)^2\bigr)^{1/8}$.
+\item\label{I2} \emph{Diagonal correlations.} If $0<k=k(J)<1$, then for every $N\ge1$
+\[
+\nu^+_J\bigl(\sigma_{(0,0)}\sigma_{(N,N)}\bigr)=\det\bigl[a_{i-j}(k)\bigr]_{0\le i,j<N},\qquad a_n(k)=\frac1{2\pi}\int_0^{2\pi}e^{-in\theta}\Bigl[\frac{1-ke^{-i\theta}}{1-ke^{i\theta}}\Bigr]^{1/2}d\theta,
+\]
+where the square root is the branch that is continuous in $\theta$ and equal to $1$ at $\theta=0$. Explicitly it is $\bar w/|w|$ with $w=1-ke^{i\theta}$, which has positive real part.
+\end{enumerate}
+Formula \ref{I1} was announced by Onsager and proved by Yang \cite{Yang52} for equal couplings and by Chang \cite{Chang52} for the rectangular lattice; its identification with the magnetization of the plus state is due to Benettin, Gallavotti, Jona-Lasinio and Stella \cite{BGJS73} and to Abraham and Martin-L\"of \cite{AML73}, and Baxter \cite{Baxter11} gives a modern account. Toeplitz representations of the correlations go back to Montroll, Potts and Ward \cite{MPW63}, and McCoy and Wu's book \cite{MW73} is the standard account of the Toeplitz representations of the row and diagonal correlations; Wu developed the Toeplitz asymptotic method for row correlations \cite{Wu66}. An accessible statement of the displayed formula \ref{I2} is equations~(8)--(12) of Lyberg and McCoy \cite{LyM07} with, in their notation, $\alpha_1=0$, $\alpha_2=k$ and $z=e^{i\theta}$: below the critical temperature the diagonal correlation is the $N\times N$ Toeplitz determinant of the symbol $\bigl((1-kz^{-1})/(1-kz)\bigr)^{1/2}$, which depends on the couplings only through $k$. The critical product \eqref{eq:Cn} is derived from \ref{I2} in \cref{lem:ising}; we claim no priority for it. Replacing $\theta$ by $-\theta$ transposes the matrix and leaves the determinant unchanged, so the orientation of the formula is immaterial. The observable in \ref{I2} is even, so it has the same expectation under the plus and minus states and under their mixtures. For equal couplings, every Gibbs state of the two-dimensional ferromagnetic Ising model is such a mixture, by Aizenman \cite{Aiz80} and Higuchi \cite{Hig81}. We use only the plus-state formula explicitly stated in \ref{I2}; no classification of all anisotropic Gibbs states is needed below.
+
+\begin{lemma}[Critical consequences]
+\label{lem:ising}
+Let $J_c=(\frac12\log3,\frac12\log2)$, so that $e^{2J_h}=3$, $e^{2J_v}=2$ and $\sinh2J_h\,\sinh2J_v=\frac43\cdot\frac34=1$, and write $\nu^+_c=\nu^+_{J_c}$.
+\begin{enumerate}[label=(\alph*)]
+\item\label{it:i1} Granting \ref{I1}, $\nu^+_c(\sigma_0)=0$.
+\item\label{it:i2} Granting \ref{I2}, for every $n\ge1$,
+\begin{equation}
+\nu^+_c\bigl(\sigma_{(0,0)}\sigma_{(n,n)}\bigr)\;=\;C_n\;:=\;\Bigl(\frac2\pi\Bigr)^n\prod_{j=1}^{n-1}\Bigl(1-\frac1{4j^2}\Bigr)^{j-n}.
+\label{eq:Cn}
+\end{equation}
+\item\label{it:i3} $C_n\ge e^{-1}n^{-1/4}$ for every $n\ge1$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+For $s>1$ put $k(s)=k(sJ_c)$. Since $\sinh$ is increasing and continuous, $k(s)<1$ for $s>1$, and $k(s)\uparrow1$ as $s\downarrow1$.
+
+\ref{it:i1} By Griffiths' inequalities, $0\le\langle\sigma_0\rangle^+_{L,J_c}\le\langle\sigma_0\rangle^+_{L,sJ_c}$ for every $L$ and $s>1$. Letting $L\to\infty$ and using \ref{I1}, $0\le\nu^+_c(\sigma_0)\le\nu^+_{sJ_c}(\sigma_0)=(1-k(s)^2)^{1/8}$, which tends to $0$ as $s\downarrow1$.
+
+\ref{it:i2} Fix $n$ and $A=\{(0,0),(n,n)\}$, and put $f_L(s)=\langle\sigma_A\rangle^+_{L,sJ_c}$ and $f(s)=\nu^+_{sJ_c}(\sigma_A)=\inf_Lf_L(s)$ for $s\ge1$. Each $f_L$ is a ratio of finite sums of exponentials, hence continuous, and it is nondecreasing in $s$ by Griffiths' inequalities; so $f$ is nondecreasing. It is also right-continuous at $s=1$: given $\eps>0$, choose $L$ with $f_L(1)<f(1)+\eps$; then $f(1)\le f(s)\le f_L(s)<f(1)+\eps$ for all $s>1$ close enough to $1$. For $s>1$, \ref{I2} gives $f(s)=\det[a_{i-j}(k(s))]_{0\le i,j<n}$. For $0<\theta<2\pi$, $w=1-k(s)e^{i\theta}$ tends to $1-e^{i\theta}=2\sin(\theta/2)\,e^{i(\theta-\pi)/2}$ with $\sin(\theta/2)>0$, so $\bar w/|w|\to e^{-i(\theta-\pi)/2}=ie^{-i\theta/2}$. The integrands have modulus one, and dominated convergence gives, for every integer $m$,
+\[
+a_m(k(s))\;\longrightarrow\;\frac1{2\pi}\int_0^{2\pi}ie^{-i(m+\frac12)\theta}\,d\theta\;=\;\frac{1}{\pi(m+\frac12)}\qquad(s\downarrow1).
+\]
+Hence, with $x_i=i+\frac12$ and $y_j=j$,
+\[
+\nu^+_c(\sigma_A)=f(1)=\lim_{s\downarrow1}f(s)=\det\Bigl[\frac1{\pi(i-j+\frac12)}\Bigr]_{0\le i,j<n}=\pi^{-n}\det\Bigl[\frac1{x_i-y_j}\Bigr]_{0\le i,j<n}.
+\]
+Cauchy's identity $\det[1/(x_i-y_j)]=\prod_{i<j}(x_j-x_i)(y_i-y_j)/\prod_{i,j}(x_i-y_j)$ applies. In the numerator each factor is $-(j-i)^2$; in the denominator the factors with $i<j$ are negative and the others positive, so the $n(n-1)/2$ signs cancel, and
+\[
+\det\Bigl[\frac1{x_i-y_j}\Bigr]=\frac{\prod_{m=1}^{n-1}m^{2(n-m)}}{2^{-n}\prod_{m=1}^{n-1}\bigl((m+\frac12)(m-\frac12)\bigr)^{n-m}}=2^n\prod_{m=1}^{n-1}\Bigl(\frac{m^2}{m^2-\frac14}\Bigr)^{n-m},
+\]
+where the $2^{-n}$ comes from the $n$ diagonal factors $x_i-y_i=\frac12$. This equals $\pi^nC_n$.
+
+\ref{it:i3} For $0\le u\le\frac14$, $-\log(1-u)=u+u^2\sum_{k\ge2}u^{k-2}/k\le u+u^2/(2(1-u))\le u+\frac23u^2$, so $L_j=\log(1-\frac1{4j^2})\ge-\frac1{4j^2}-\frac1{24j^4}$. Wallis' product $\prod_{j\ge1}(1-\frac1{4j^2})=\frac2\pi$ turns \eqref{eq:Cn} into
+\[
+\log C_n\;=\;n\sum_{j\ge n}L_j\;+\;\sum_{j=1}^{n-1}j\,L_j.
+\]
+Let $n\ge2$. From $\sum_{j\ge n}j^{-2}\le\frac1{n-1}$ and $\sum_{j\ge n}j^{-4}\le\frac1{3(n-1)^3}$, together with $n/(n-1)\le2$ and $n/(n-1)^3\le2$, the first term is at least $-\frac14\cdot2-\frac1{72}\cdot2=-\frac12-\frac1{36}$. From $\sum_{j<n}j^{-1}\le1+\log n$ and $\sum_{j\ge1}j^{-3}\le\frac32$, the second term is at least $-\frac14\log n-\frac14-\frac1{16}$. Since $\frac12+\frac1{36}+\frac14+\frac1{16}<1$, $C_n\ge e^{-1}n^{-1/4}$. Finally $C_1=2/\pi>e^{-1}$.
+\end{proof}
+
+\begin{theorem}[A critical heat-bath PCA]
+\label{thm:critical}
+Let $p_c$ be the PCA on $\Z^2$ with alphabet $\{-1,+1\}$, neighbourhood $N=\{0,\pm e_1,\pm e_2\}$ and
+\[
+p_c(+1\mid u)=\frac{3^{s_h}2^{s_v}}{1+3^{s_h}2^{s_v}},\qquad s_h=u_{e_1}+u_{-e_1},\quad s_v=u_{e_2}+u_{-e_2}.
+\]
+It is the heat-bath rule of the Ising model at $J_c$: $p_c(+1\mid u)$ is the conditional probability under that model that a site carries $+1$ given its four neighbours $u_{\pm e_1},u_{\pm e_2}$. The values of $p_c(+1\mid u)$ are the nine rationals $\frac1{37},\frac1{10},\frac15,\frac4{13},\frac12,\frac9{13},\frac45,\frac9{10},\frac{36}{37}$, a set closed under $p\mapsto1-p$, so every entry of the table is one of them and the table is strictly positive; it is attractive and symmetric under the global spin flip. Let $\mathbf+,\mathbf-$ be the constant rows, $P_c$ the row kernel, $m_t=(P_c^t\mathbf+)(\sigma_0=+1)-(P_c^t\mathbf-)(\sigma_0=+1)$, and let $\Z^2_{\mathrm{even}}$ and $\Z^2_{\mathrm{odd}}$ be the sets of sites with even and odd coordinate sum.
+\begin{enumerate}[label=(\roman*)]
+\item\label{it:c1} Granting \ref{I1}, $p_c$ is uniformly ergodic in the sense of \eqref{eq:qualitative}, and its stationary law is $\mu_c=\nu^+_c|_{\mathrm{even}}\otimes\nu^+_c|_{\mathrm{odd}}$, the product of the restrictions of $\nu^+_c$ to $\Z^2_{\mathrm{even}}$ and $\Z^2_{\mathrm{odd}}$.
+\item\label{it:c2} Granting \ref{I2}, for every $t\ge0$,
+\begin{equation}
+\sup_{\eta,\zeta}\dtv\bigl((P_c^t\eta)_{\{0\}},(P_c^t\zeta)_{\{0\}}\bigr)\;=\;m_t\;\ge\;\tfrac12(2t+1)^{-1/8}\;\ge\;\tfrac14(t+1)^{-1/8}.
+\label{eq:critbound}
+\end{equation}
+In particular $p_c$ is not uniformly exponentially ergodic.
+\end{enumerate}
+Granting both, $\sup_\eta\dtv\bigl((P_c^t\eta)_{\{0\}},(\mu_c)_{\{0\}}\bigr)=m_t/2$ for every $t$.
+\end{theorem}
+
+\begin{proof}
+For $s_h,s_v\in\{-2,0,2\}$ the number $3^{s_h}2^{s_v}$ is one of $\frac1{36},\frac19,\frac14,\frac49,1,\frac94,4,9,36$, which gives the nine values. Under the Ising specification at $J_c$ the conditional law of $\sigma_x$ given all other spins is $e^{\sigma_xh}/(e^h+e^{-h})$ with $h=J_hs_h+J_vs_v$ read off the four neighbours, and $e^{2h}=3^{s_h}2^{s_v}$; this is $p_c$. Attractivity and flip symmetry are visible from the formula.
+
+Use the threshold representation: $\sigma_{t+1}(x)=+1$ if and only if $U_{x,t+1}\le p_c(+1\mid\sigma_t(x+N))$, with independent uniform variables $U_{x,t}$, and let $F_t(\eta)$ be the row at time $t$ from the row $\eta$. By attractivity $F_t(\mathbf-)\le F_t(\eta)\le F_t(\mathbf+)$ for every $\eta$. By translation invariance and flip symmetry $\E F_t(\mathbf+)(x)=2(P_c^t\mathbf+)(\sigma_0=+1)-1=m_t$ and $\E F_t(\mathbf-)(x)=-m_t$ for every $x$, and $m_t\ge0$. Consequently
+\begin{equation}
+-m_t\;\le\;\E F_t(\eta)(x)\;\le\;m_t\qquad\text{for every row }\eta\text{ and every site }x,
+\label{eq:sandwich}
+\end{equation}
+and the one-site diameter in \eqref{eq:critbound} equals $m_t$, attained by $\mathbf+$ and $\mathbf-$.
+
+\emph{Stationary product laws.} Let $\nu$ be a Gibbs measure of the Ising model at $J_c$. The even sites are pairwise non-adjacent and all their neighbours are odd, so under $\nu$, given the odd spins, the even spins are independent with the laws $p_c(\cdot\mid\text{neighbours})$, and symmetrically. One step of $p_c$ computes the new even spins from the old odd spins and fresh uniforms, and the new odd spins from the old even spins and other fresh uniforms. If the old row has the law $\nu|_{\mathrm{even}}\otimes\nu|_{\mathrm{odd}}$, the new even spins therefore have the law $\nu|_{\mathrm{even}}$, the new odd spins the law $\nu|_{\mathrm{odd}}$, and the two are independent because they are built from independent inputs: $\nu|_{\mathrm{even}}\otimes\nu|_{\mathrm{odd}}$ is stationary. The same argument applies in the box $\Lam_L$ with the spins outside fixed to $+1$, to the measure $\mu^+_{L,J_c}$ and to the chain $Y^L$ on $\{-1,+1\}^{\Lam_L}$ that updates the sites of $\Lam_L$ by $p_c$ and reads $+1$ outside $\Lam_L$.
+
+\ref{it:c1} Run $Y^L$ from all $+1$, with the uniform variables of the full-space dynamics at the sites of $\Lam_L$. Outside $\Lam_L$ the box reads $+1$, so induction over time and attractivity give $F_t(\mathbf+)(x)\le Y^L_t(x)$ for $x\in\Lam_L$. The chain $Y^L$ is a finite Markov chain whose transition probabilities are all positive, so it converges in law to its unique stationary law, which is $\mu^+_{L,J_c}|_{\mathrm{even}}\otimes\mu^+_{L,J_c}|_{\mathrm{odd}}$ by the previous paragraph. Hence, for every $L$,
+\[
+\limsup_{t\to\infty}m_t\;=\;\limsup_{t\to\infty}\E F_t(\mathbf+)(0)\;\le\;\lim_{t\to\infty}\E Y^L_t(0)\;=\;\langle\sigma_0\rangle^+_{L,J_c},
+\]
+and as $L\to\infty$ the right side tends to $\nu^+_c(\sigma_0)=0$, by \cref{lem:ising}\ref{it:i1}. So $m_t\to0$. The law $\mu_c$ is stationary by the previous paragraph. Let $\xi$ have law $\mu_c$, independent of the uniform variables, so that $F_t(\xi)$ has law $\mu_c$. For every row $\eta$ and finite $I$, the ordering gives
+\[
+\dtv\bigl((P_c^t\eta)_I,(\mu_c)_I\bigr)\;\le\;\sum_{x\in I}\Prob\bigl(F_t(\mathbf+)(x)\neq F_t(\mathbf-)(x)\bigr)\;=\;|I|\,m_t\;\longrightarrow\;0,
+\]
+uniformly in $\eta$. This is uniform ergodicity, and it shows that $\mu_c$ is the only stationary law.
+
+\ref{it:c2} Fix $t\ge0$, put $n=2t+1$ and $y=(n,n)$. The spin $F_t(\eta)(0)$ depends only on $\eta$ and on the variables $U_{z,s}$ with $1\le s\le t$ and $\|z\|_1\le t-s$, and $F_t(\eta)(y)$ only on $\eta$ and the variables with $\|z-y\|_1\le t-s$. These two sets of variables are disjoint because $\|y\|_1=2n>2t$, so, given the initial row, the two spins are independent. Start from a row $\xi$ of law $\nu^+_c|_{\mathrm{even}}\otimes\nu^+_c|_{\mathrm{odd}}$, independent of the uniform variables; this law is stationary by the product-law paragraph, which does not use \ref{I1}. The sites $0$ and $y$ are both even, so their joint law under this product is their joint law under $\nu^+_c$. With \eqref{eq:sandwich},
+\[
+\nu^+_c\bigl(\sigma_0\sigma_y\bigr)\;=\;\E\bigl[F_t(\xi)(0)\,F_t(\xi)(y)\bigr]\;=\;\E\Bigl[\E\bigl[F_t(\xi)(0)\,\big|\,\xi\bigr]\;\E\bigl[F_t(\xi)(y)\,\big|\,\xi\bigr]\Bigr]\;\le\;m_t^2.
+\]
+By \cref{lem:ising}\ref{it:i2} and \ref{it:i3}, $m_t^2\ge C_{2t+1}\ge e^{-1}(2t+1)^{-1/4}$, so $m_t\ge e^{-1/2}(2t+1)^{-1/8}\ge\frac12(2t+1)^{-1/8}$; and $(2t+1)^{-1/8}\ge2^{-1/8}(t+1)^{-1/8}$ with $\frac12\cdot2^{-1/8}>\frac14$. If \eqref{eq:uee} held, \eqref{eq:uee} with $I=\{0\}$ and the rows $\mathbf\pm$ would give $m_t\le2Ce^{-ct}$, which is impossible.
+
+Granting both inputs, $(\mu_c)_{\{0\}}$ gives probability $\frac12(1+\nu^+_c(\sigma_0))=\frac12$ to $+1$, while by \eqref{eq:sandwich} the probability of $+1$ at time $t$ from any row lies between $\frac12(1-m_t)$ and $\frac12(1+m_t)$, with both ends attained.
+\end{proof}
+
+\begin{remark}[Consequences and scope]
+\label{rem:critical}
+(a) By \cref{prop:wsm-to-erg}, the space--time specification of $p_c$ on $\Z^3$ does not have exponential weak spatial mixing; by \cref{thm:simplex}, its stationary trajectory law is its only uniformly recurrent DLR state. Whether it is its only DLR state is open (\cref{prob:rate}). (b) The same rule acting separately on the planes $\Z^2\times\{w\}$ of $\Z^d$, $d\ge3$, that is with the neighbourhood $\{0,\pm e_1,\pm e_2\}\subset\Z^d$, is uniformly ergodic by the same coupling and has the same one-site diameter $m_t$; so intermediate rates occur for positive PCA in every dimension $d\ge2$. (c) The bound is consistent with the criterion of Maes and Shlosman \cite[Corollary~2]{MS93}, since $m_t$ is not $o(t^{-2})$. Its monotone threshold representation has $q_t=m_t$, as in \cref{prop:monotone}, so \cref{cor:attractive} below does not apply to it. (d) The exponent $-1/8$ comes only from the static exponent $-1/4$ of $C_n$, and it is not claimed to be the true rate of decay of $m_t$. A Monte Carlo test with a control, described in \cref{app:repro}, found $m_t$ far above the bound up to $t=400$; it is not part of the proof.
+\end{remark}
+
 % =====================================================================
 \section{Consequences in equilibrium language}
 \label{sec:equilibrium}
@@ -1283,6 +1412,216 @@ If $C_{N,R}$ holds, \cite[Main Theorem]{MS91} together with $\sum_x\delta_x(P^bf
 Thus in one dimension the past-only conditions $C_{N,R}$ and the strict equilibrium block conditions $C_{\mathsf B}<|\mathsf B|$ in Problem~4 of \cite[Section~6.6]{LMS90} hold in the same region of positive PCA tables. Their common region is the region of uniform exponential ergodicity, equivalently of all-DLR uniqueness with exponential weak mixing; bare uniqueness without a rate remains the question of \cref{prob:rate}.
 
 % =====================================================================
+\section{Higher dimensions under coalescence}
+\label{sec:higher}
+% =====================================================================
+
+The forward proof of \cref{thm:main} uses one dimension twice: in B\'erard's coupling and in the harmonic sum \eqref{eq:harmonic}, which pays for the cap through the total size of the cluster of bad markers. This section removes the second use. The cap is charged not at the last level but at an intermediate level~$j$: the future above level~$j$ is integrated into a likelihood that changes by a bounded factor per changed spin, whatever the time still to come, and $j$ is chosen where the size that the cluster has accumulated dominates its current width. A growth argument shows that such a level exists in every dimension. The probabilistic input is then a coalescing local flow, \cref{def:flow}, whose badness probability is small enough for the condition \eqref{eq:taud}. In $d=1$ B\'erard's theorem supplies one for every uniformly exponentially ergodic PCA (\cref{prop:berard,rem:flowhyp}); in $d\ge2$ we assume it. A basic random-map representation that coalesces exponentially for all inputs at once supplies one (\cref{cor:basic}), and so does every attractive binary PCA that is uniformly exponentially ergodic (\cref{cor:attractive}). Whether every uniformly exponentially ergodic PCA on $\Z^d$, $d\ge2$, has such a flow is open; constructing one is a sufficient route to the all-DLR uniqueness part of \cref{prob:higher}.
+
+Throughout this section the spatial lattice is $\Z^d$, $d\ge1$, with a finite alphabet, a finite neighbourhood $N\ni0$ and a strictly positive table. Put $r=\max\{1,\max_{y\in N}\|y\|_\infty\}$, let $K=\max_{b,u,u'}p(b\mid u)/p(b\mid u')$ as in \eqref{eq:K}, now with $u,u'\in\A^N$, and put $\zeta=|N|\log K$.
+
+\subsection{Local flows}
+
+Fix integers $H,B\ge1$, $W\ge0$ and $c\ge r$. For $j\ge1$ the \emph{$j$-th slab} consists of the rows $(j-1)H+1,\dots,jH$; its initial row is $(j-1)H$, and its terminal row $jH$ is called \emph{level~$j$}. The \emph{cells} are the cubes $C_k=Bk+\{0,\dots,B-1\}^d$, $k\in\Z^d$, and distances between cell indices are sup-norm distances. For the root $v=(0,0)$ and $n\ge1$ put
+\begin{equation}
+V_n=\{v\}\cup\bigl\{(x,t):1\le t\le nH,\ \|x\|_\infty\le W+ct\bigr\}.
+\label{eq:Vnd}
+\end{equation}
+Because $c\ge r$, every child of $v$ lies in row~$1$ of $V_n$, and a site $(x,t)\notin V_n$ with $1\le t\le nH$ has no parent in $V_n$: for $t\ge2$ its parents have sup-norm larger than $W+ct-r\ge W+c(t-1)$, and for $t=1$ they differ from $v$ because $\|x\|_\infty>W+c\ge r$. The exterior children of $V_n$ therefore all lie in the \emph{cap}, the row $nH+1$, and the factorization of \eqref{eq:spec} gives the cap identity \eqref{eq:capidentity} verbatim. In detail, for an exterior configuration $\tau$ and $a\in\A$, let $X^a$ be the forward process in $V_n\setminus\{v\}$ with $\sigma_v=a$, row~$0$ equal to $\tau$ off~$v$ and exterior parents fixed by~$\tau$, and $X^a_t$ its row~$t$; let $h$ be the product of the transition factors of the cap sites, evaluated at their values in~$\tau$, and $Z_a=\E\,h(X^a_{nH})$. Then $\gamma^\tau_{V_n}(\sigma_v=a)=p(a\mid\tau_{\Ue(v)})Z_a/\sum_bp(b\mid\tau_{\Ue(v)})Z_b$. For another root $v'$, the volume $v'+V_n$, the slabs and the cells are translated by~$v'$.
+
+\begin{definition}[Coalescing local flow]
+\label{def:flow}
+A \emph{coalescing local flow} for $p$ at the scales $H,B,W,c$ consists of independent random variables, the \emph{seeds}, each assigned to one slab, and of the maps and samplers below, such that \ref{F1}--\ref{F6} hold with constants $p_*\in(0,1]$, an integer $R_0\ge1$, $c_0,C_F<\infty$ and $c_F>0$ that depend neither on $n$, nor on the exterior configuration, nor on the position of the root. A realization of the seeds is denoted by $x$, and $X^a(x)$ is the output of the sampler of \ref{F2} driven by~$x$.
+\begin{enumerate}[label=(F\arabic*)]
+\item\label{F1} \emph{Unrestricted flow.} For every slab~$j$, a measurable map $\Psi_j$ that takes a row $\eta\in\A^{\Z^d}$ at time $(j-1)H$ and the seeds of slab~$j$ and returns a history of the rows of slab~$j$; for every fixed $\eta$ this history has the law of the PCA run for $H$ steps from~$\eta$.
+\item\label{F2} \emph{Clipped samplers, slab by slab.} For every $n\ge1$, exterior configuration $\tau$ and root value $a$, a sampler of $X^a$ from the seeds of slabs $1,\dots,n$ with the \emph{slab Markov property}: the part of $X^a$ in slab~$j$ is a function of $X^a_{(j-1)H}$ (for $j=1$, of~$a$), of $\tau$ and of the seeds of slab~$j$ only, and for every fixed value of $X^a_{(j-1)H}$ it has the forward law of the PCA in that part of $V_n$, with exterior parents fixed by~$\tau$.
+\item\label{F3} \emph{Markers.} The \emph{marker} $(j,k)$, $j\ge1$, $k\in\Z^d$, is \emph{bad} if the word of $\Psi_j$ on $C_k$ at level~$j$ is not constant as a function of the initial row~$\eta$. Badness of $(j,k)$ depends only on the seeds in a deterministic finite set $U_{j,k}$ of seeds of slab~$j$; $\Prob((j,k)\text{ is bad})\le p_*$; and $U_{j,k}\cap U_{j,k'}=\varnothing$ whenever $\|k-k'\|_\infty>2R_0$.
+\item\label{F4} \emph{Splice.} Put $R=3R_0$, let $k_0$ be the index of the cell containing the root, and define the \emph{reached cluster} of $x$ by $S_0=\{k_0\}$ and
+\[
+S_j(x)=\bigl\{k:\ \dist(k,S_{j-1}(x))\le R,\ (j,k)\text{ is bad in }x\bigr\},\qquad1\le j\le n.
+\]
+For every $x$, every $1\le j\le n$, every root value $a$ and every $y$ that agrees with $x$ outside $U_{\le j}(x)=\bigcup_{i=1}^j\bigcup_{k\in S_i(x)}U_{i,k}$, the rows $X^a_{jH}(x)$ and $X^a_{jH}(y)$ differ in at most $c_0\,|S_j(x)|$ sites.
+\item\label{F5} \emph{Common extinction.} For every $x$, every $1\le j\le n$ and all root values $a,b$: if $S_j(x)=\varnothing$, then $X^a_{jH}(x)=X^b_{jH}(x)$.
+\item\label{F6} \emph{Exponential coalescence.} For every $m\ge1$ and every site $z\in\Z^d$, the composition $\Psi_{[1,m]}$ of the maps of slabs $1,\dots,m$ satisfies $\Prob\bigl(\eta\mapsto\Psi_{[1,m]}(\eta)(z,mH)\ \text{is not constant}\bigr)\le C_Fe^{-c_Fm}$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark}[On the hypotheses]
+\label{rem:flowhyp}
+The hypotheses \ref{F1}, \ref{F2}, \ref{F4}, \ref{F5} and \ref{F6} are the forms in $d$ dimensions of \ref{B1}--\ref{B4}, \cref{lem:clip} and \cref{lem:splice}. Three of them carry more weight than their statement suggests. The slab Markov property in \ref{F2} makes the history above a level a function of that level's row and of fresh seeds; it would fail if a tile of the flow straddled a slab boundary. The uniformity of the constants over the position of the root is used by the DLR step and by the weak-mixing coupling, which apply the root comparison to translated volumes; it holds automatically when the samplers for $v'+V_n$ are the translates of those for $V_n$, which is always possible because the PCA is translation invariant, and it includes the finitely many residue classes of a periodic flow. Finally, in applications the splice \ref{F4} and the extinction \ref{F5} are proved by the induction of \cref{lem:splice}, which needs the speed $c\ge r$ and a buffer $W$ large enough that the marker cones and splice neighbourhoods of every cell the cluster can reach lie where the clipped sampler coincides with the unrestricted flow; in one dimension this is the role of \eqref{eq:Wc}. For B\'erard's flow in $d=1$, with large slabs of $m$ small slabs and the choices of \cref{sec:cells,sec:capidentity}, \ref{F1}--\ref{F6} hold by \ref{B1}--\ref{B4} and \cref{lem:clip,lem:splice}, and \eqref{eq:taud} holds for $m$ large; \cref{thm:prefix} then reproves the uniqueness part of \cref{thm:main} without \eqref{eq:harmonic}.
+\end{remark}
+
+\begin{theorem}[Prefix-cap theorem]
+\label{thm:prefix}
+Let $p$ be a finite-alphabet, finite-range, strictly positive PCA on $\Z^d$, $d\ge1$, with a coalescing local flow whose constants satisfy
+\begin{equation}
+D=(2R_0+1)^d,\qquad\Delta_d=2(2R+1)^d,\qquad\tau_*=e\,\Delta_d^{\,2}\,p_*^{1/D}<1.
+\label{eq:taud}
+\end{equation}
+Then:
+\begin{enumerate}[label=(\roman*)]
+\item\label{it:p1} the PCA is uniformly exponentially ergodic;
+\item\label{it:p2} there are $C_0<\infty$ and $s\in(0,1)$ such that, for every root $v'\in\Z^{d+1}$, every $n\ge1$ and every exterior configuration $\tau$,
+\begin{equation}
+\dtv\bigl((\gamma^\tau_{v'+V_n})_{v'},\ p(\,\cdot\mid\tau_{\Ue(v')})\bigr)\;\le\;\min\{1,\,C_0s^n\};
+\label{eq:rootd}
+\end{equation}
+\item\label{it:p3} the space--time specification has exactly one DLR state, the two-sided stationary trajectory law $\ba$.
+\end{enumerate}
+\end{theorem}
+
+In \ref{it:p3} the identification of the unique DLR state with $\ba$ uses \ref{it:p1}, which comes from the exponential coalescence \ref{F6}; no ergodicity is assumed separately. The flow enters only through \ref{F1}--\ref{F6} and the smallness condition \eqref{eq:taud}.
+
+\subsection{Likelihood messages}
+
+Fix the root $v=(0,0)$, $n\ge1$ and $\tau$. For $1\le j\le n$ and a configuration $z$ of row $jH$ of $V_n$, let $g_j(z)$ be the expectation of $h$ under the forward law of the PCA in the rows $jH+1,\dots,nH$ of $V_n$ started from $z$, with exterior parents fixed by $\tau$; thus $g_n=h$. Given the seeds of slabs $1,\dots,j$, the history above level~$j$ is produced slab by slab from $X^a_{jH}$ with the seeds of the later slabs, which are independent of the given ones, so by \ref{F2} it has the forward law from $X^a_{jH}$:
+\begin{equation}
+\E\bigl[h(X^a_{nH})\,\big|\,\text{seeds of slabs }1,\dots,j\bigr]\;=\;g_j(X^a_{jH}).
+\label{eq:message}
+\end{equation}
+
+\begin{lemma}[Messages with a duration-free constant]
+\label{lem:message}
+If $z$ and $z'$ are configurations of row $jH$ of $V_n$ that differ in $k$ sites, then $g_j(z)\le e^{\zeta k}g_j(z')$. The bound does not depend on $n-j$.
+\end{lemma}
+
+\begin{proof}
+For $j=n$, each changed spin is a parent of at most $|N|$ cap sites, and each factor ratio is at most~$K$. For $j<n$, write $g_j(z)$ as a sum over complete histories $w$ of the rows $jH+1,\dots,nH$ of $V_n$ of the product of their incoming transition factors, read with parents in $w$, $z$ or $\tau$, times $h(w_{nH})$. Replacing $z$ by $z'$ in a fixed term changes only the factors of the sites of row $jH+1$ that have a changed parent; there are at most $|N|k$ of them, and each ratio is at most~$K$. The later factors and the cap factors are evaluated on the same $w$ and do not change. Summing over $w$ proves the claim. No coupling of future seeds and no independence of terminal outputs is used.
+\end{proof}
+
+For $j=n$ this is \eqref{eq:lipschitz}, with $\zeta$ in place of $\beta$.
+
+\subsection{The fixed-prefix bound}
+
+A \emph{prefix} of height $j$ is a sequence $S=(S_0,S_1,\dots,S_j)$ of finite sets of cell indices with $S_0=\{k_0\}$. Its event is $E_S=\{x:S_i(x)=S_i,\ 1\le i\le j\}$, its \emph{mass} is $M(S)=\sum_{i=1}^j|S_i|$, and its \emph{width} is $|S_j|$. Put $b=\zeta c_0$.
+
+\begin{lemma}[Fixed-prefix bound]
+\label{lem:prefix}
+For every prefix $S$ of height $j\le n$ and every root value $a$,
+\begin{equation}
+\E\bigl[\mathbf 1_{E_S}\,h(X^a_{nH})\bigr]\;\le\;e^{b|S_j|}\,p_*^{M(S)/D}\,Z_a.
+\label{eq:prefixbound}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The event $E_S$ depends only on badness at levels $1,\dots,j$, hence, by \ref{F3}, only on seeds of slabs $1,\dots,j$, and by \eqref{eq:message} the left side of \eqref{eq:prefixbound} equals $\E[\mathbf 1_{E_S}\,g_j(X^a_{jH}(x))]$. Let $U(S)=\bigcup_{i=1}^j\bigcup_{k\in S_i}U_{i,k}$, let $x'$ be an independent copy of the seeds of slabs $1,\dots,j$, and define the hybrid $y$ by $y=x'$ on $U(S)$ and $y=x$ elsewhere, as in \eqref{eq:hybrid}. On $E_S$ we have $U_{\le j}(x)=U(S)$, so \ref{F4} and \cref{lem:message} give, for every value of $x'$,
+\[
+g_j\bigl(X^a_{jH}(x)\bigr)\;\le\;e^{b|S_j|}\,g_j\bigl(X^a_{jH}(y)\bigr)\qquad\text{on }E_S.
+\]
+Let $\mathcal B_S$ be the event that every \emph{nonroot} marker listed in $S$, that is every $(i,k)$ with $1\le i\le j$ and $k\in S_i$, is bad in~$x$. On $E_S$ each such marker belongs to the reached cluster and is therefore bad, so $E_S\subset\mathcal B_S$, and since $g_j\ge0$,
+\[
+\E\bigl[\mathbf 1_{E_S}\,g_j(X^a_{jH}(x))\bigr]\;\le\;e^{b|S_j|}\,\E\bigl[\mathbf 1_{\mathcal B_S}\,g_j(X^a_{jH}(y))\bigr].
+\]
+The event $\mathcal B_S$ is a function of $x$ restricted to $U(S)$, while $y$ is a function of $x$ off $U(S)$ and of $x'$; so $y$ has the product law of the seeds and is independent of $\mathcal B_S$, and the right side equals $e^{b|S_j|}\,\Prob(\mathcal B_S)\,\E\,g_j(X^a_{jH})=e^{b|S_j|}\,\Prob(\mathcal B_S)\,Z_a$, by \eqref{eq:message}. Finally, colour each cell index by its residue modulo $2R_0+1$ in every coordinate; there are $D$ colours, and two distinct indices of one colour are at distance at least $2R_0+1$. Some colour contains at least $M(S)/D$ of the listed nonroot markers. Within one slab their seed sets are pairwise disjoint by \ref{F3}, and different slabs have independent seeds, so their badness events are independent and $\Prob(\mathcal B_S)\le p_*^{M(S)/D}$.
+\end{proof}
+
+As in \cref{sec:resample}, the resampled set is fixed before the seeds are drawn; no independence is asserted for a random set. The exact-prefix event is enlarged to $\mathcal B_S$ only after the splice has been applied on $E_S$, and no event depending on seeds above level~$j$ is kept after the future is integrated into~$g_j$.
+
+\subsection{A late cut}
+
+\begin{lemma}[A late cut]
+\label{lem:latecut}
+Let $L>1$. There is $n_0$, depending only on $d$, $R$ and $L$, such that for every $n\ge n_0$ and every realization $x$ with $S_n(x)\neq\varnothing$ there is a level $j$ with $\lceil n/2\rceil\le j\le n$ and
+\[
+M_j(x)\;:=\;\sum_{i=1}^j|S_i(x)|\;\ge\;L\,|S_j(x)|.
+\]
+Moreover $M_j(x)\ge j\ge n/2$.
+\end{lemma}
+
+\begin{proof}
+Write $a_i=|S_i(x)|$ and $M_i=M_i(x)$. A level that is empty stays empty, so survival to level~$n$ gives $a_i\ge1$ for $1\le i\le n$, and $M_j\ge j$. Every index in $S_i(x)$ is within distance $Ri$ of $k_0$, so $a_i\le(2Ri+1)^d\le(2R+1)^d(i+1)^d$ and $M_n\le(2R+1)^d(n+1)^{d+1}$. Suppose that $M_j<La_j$ for every $j$ with $\lceil n/2\rceil\le j\le n$. For each of the $\lfloor n/2\rfloor$ values $\lceil n/2\rceil<j\le n$ we have $a_j=M_j-M_{j-1}$, hence $M_j<L(M_j-M_{j-1})$, that is, $M_j>\frac{L}{L-1}M_{j-1}$. Since $M_{\lceil n/2\rceil}\ge1$, this gives $M_n>(L/(L-1))^{\lfloor n/2\rfloor}$, which exceeds $(2R+1)^d(n+1)^{d+1}$ for all $n\ge n_0(d,R,L)$, a contradiction.
+\end{proof}
+
+In one dimension \eqref{eq:harmonic} shows that the last level is already a good cut. In $d\ge2$ a cluster can stay thin for a long time and fan out at the end, so that its final width is comparable to its total mass and the charge at the cap cannot be paid; the lemma then finds an earlier level at which the mass dominates the width, using only the polynomial growth of the cluster, and \cref{lem:message} makes the charge at that level independent of the time still to come.
+
+\subsection{Proof of the prefix-cap theorem}
+
+\begin{proof}[Proof of \cref{thm:prefix}]
+\ref{it:p1} The PCA is time-homogeneous, so \ref{F1} and \ref{F6} hold for slabs that start at any time. Let $\mu$ be a stationary law, $\eta$ a deterministic row, $I\subset\Z^d$ finite, and $t=t_0+mH$ with $0\le t_0<H$ and $m\ge1$. Run the PCA for $t_0$ steps from $\eta$, draw an independent row of law $\mu$, and apply to both rows the maps of $m$ slabs with common seeds, independent of everything else. The two rows at time $t$ have the laws $P^t\eta$ and $\mu$, and they agree at every site of $I$ at which the composite map is constant; by \ref{F6} and a union bound, $\dtv((P^t\eta)_I,\mu_I)\le|I|\,C_Fe^{-c_Fm}\le|I|\,C_Fe^{c_F}e^{-c_Ft/H}$. For $t<H$ the trivial bound $1$ suffices after the constant is enlarged. This is \eqref{eq:uee}.
+
+\ref{it:p2} By the uniformity in \cref{def:flow} it suffices to take $v'=v$. Fix $L=\max\{2,b\}$ and $n\ge n_0(d,R,L)$, and let $\mathcal S_n$ be the set of prefixes $S$ of height $j\in[\lceil n/2\rceil,n]$ with every $S_i$ nonempty, every index of $S_i$ within distance $R$ of $S_{i-1}$, and $M(S)\ge L|S_j|$. By \cref{lem:latecut}, every $x$ with $S_n(x)\neq\varnothing$ lies in $E_S$ for some $S=(S_0,S_1(x),\dots,S_j(x))\in\mathcal S_n$. For $S\in\mathcal S_n$, $b|S_j|\le L|S_j|\le M(S)$, so \cref{lem:prefix} gives $\E[\mathbf 1_{E_S}h(X^a_{nH})]\le(e\,p_*^{1/D})^{M(S)}Z_a$. The vertex set $\{(i,k):0\le i\le j,\ k\in S_i\}$ determines $S$, its height being its top level; it contains $(0,k_0)$ and is connected in the graph on $\{0,1,2,\dots\}\times\Z^d$ with an edge between $(i,k)$ and $(i+1,k')$ whenever $\|k-k'\|_\infty\le R$, whose maximum degree is at most $\Delta_d$. A deterministic spanning tree and a depth-first walk, as for \eqref{eq:count}, show that at most $\Delta_d^{2M}$ prefixes in $\mathcal S_n$ have mass $M$, jointly over all heights, so no factor $n$ enters. Every $S\in\mathcal S_n$ has $M(S)\ge\lceil n/2\rceil$. A union bound over $\mathcal S_n$, in which overlaps between the events $E_S$ are harmless, gives
+\[
+\E\bigl[\mathbf 1_{\{S_n\neq\varnothing\}}\,h(X^a_{nH})\bigr]\;\le\;Z_a\sum_{M\ge\lceil n/2\rceil}\tau_*^M\;=\;\frac{\tau_*^{\lceil n/2\rceil}}{1-\tau_*}\,Z_a\;=:\;\delta_n\,Z_a.
+\]
+The cluster depends only on the seeds, so $\{S_n=\varnothing\}$ is one event for every root value, and on it the cap row is the same for every root value by \ref{F5}; hence $Z_0=\E[\mathbf 1_{\{S_n=\varnothing\}}h(X^a_{nH})]$ does not depend on~$a$. The mixture argument \eqref{eq:mixture}, with $w=p(\cdot\mid\tau_{\Ue(v)})$, and the cap identity give \eqref{eq:rootd} with the bound $\delta_n$ for $n\ge n_0$; smaller $n$ are absorbed into $C_0$, with $s=\tau_*^{1/2}$.
+
+\ref{it:p3} The argument of \cref{sec:dlr} uses only the root comparison for the translated future-only volumes, the DLR equations and the entrance-law identification, and it applies verbatim on $\Z^{d+1}$: \eqref{eq:rootd} gives \eqref{eq:onesite} and \eqref{eq:row}, so every DLR state is a two-sided trajectory law of the PCA, and \ref{it:p1} identifies its entrance law with the stationary one, so every DLR state equals~$\ba$. Existence follows from \cref{lem:halfspace}.
+\end{proof}
+
+\subsection{Basic flows}
+
+\begin{corollary}[All-input coalescence of a basic representation]
+\label{cor:basic}
+Let $p$ be a finite-alphabet, finite-range, strictly positive PCA on $\Z^d$, $d\ge1$, with a local-map representation whose common-map coefficient \eqref{eq:q}, with the composite maps taken over $\Z^d$, satisfies $q_t\le Ce^{-\alpha t}$ for all $t\ge0$ and some $C,\alpha>0$. Then the space--time specification has exactly one DLR state, $\ba$, and there are $C_*,c_*>0$ such that \eqref{eq:conv} and the weak-mixing bound \eqref{eq:wsm} hold for every finite $\Lam\subset\Z^{d+1}$, every $E\subset\Lam$ and all exterior configurations $\tau,\tau'$.
+\end{corollary}
+
+\begin{proof}
+\emph{The flow.} Take the maps themselves as seeds: the seeds of slab $j$ are the maps at the updates of its rows. Given $H$, put $B=rH$, $W=5B$ and $c=3r$. Here $c$ is the lateral speed of \cref{def:flow}; the coalescence rate of the hypothesis $q_t\le Ce^{-\alpha t}$ is denoted $\alpha$, and the two numbers need not agree. The unrestricted map $\Psi_j$ applies the maps chronologically. The clipped sampler applies them chronologically at the sites of $V_n\setminus\{v\}$, reading parents in $V_n$ from the values already produced and all other parents from $a$ at the root and from $\tau$. Both have the exact forward law, because the maps at the sites of a row are independent of each other and of the past, and the clipped sampler is computed slab by slab; so \ref{F1} and \ref{F2} hold. The word of $\Psi_j$ on $C_k$ at level~$j$ depends on the initial row only within sup-distance $rH=B$ of $C_k$, that is, on the cells within distance $1$ of $k$, and on the maps of slab~$j$ in the backward cone
+\[
+U_{j,k}=\bigl\{(y,s):(j-1)H<s\le jH,\ \dist(y,C_k)\le r(jH-s)\bigr\},
+\]
+which lies over the same cells. Cones of cells at distance more than $2$ are disjoint, so \ref{F3} holds with $R_0=1$, hence $R=3$, $D=3^d$ and $\Delta_d=2\cdot7^d$, and with $p_*=\bar p_H:=(rH)^dCe^{-\alpha H}$, which is positive and, by a union bound over the sites of~$C_k$, bounds the badness probability $B^dq_H$; we take $H$ so large that $\bar p_H\le1$. \Ref{F6} holds because the composite of $m$ slabs at a site is the depth-$mH$ composite map, whose failure to be constant has probability $q_{mH}\le Ce^{-\alpha Hm}$. The family of maps is invariant under space--time translations, so the constants do not depend on the position of the root.
+
+\emph{The buffer.} A cell within distance $3j$ of $k_0$ lies within sup-distance $(3j+1)B$ of the root, and its backward cone in slab~$j$ within $(3j+2)B$, while the half-width of $V_n$ in slab~$j$ is at least $W+c(j-1)H=(3j+2)B$. So for every cell within distance $Rj=3j$ of $k_0$, the clipped word at level~$j$ is the word of $\Psi_j$ applied to the clipped row at level $j-1$, extended arbitrarily outside $V_n$; for $j=1$ the input is the row equal to $a$ at the root and to $\tau$ elsewhere.
+
+\emph{Splice.} Let $y$ agree with $x$ outside $U_{\le j}(x)$. We show by induction on $i\le j$ that the clipped rows at level~$i$ differ only in cells within distance $2$ of $S_i(x)$. At level $0$ they agree. Suppose that the word on $C_k$ at level~$i$ differs. Whatever the buffer, it depends only on the input cells within distance $1$ of $k$ and on maps in $U_{i,k}$. If it reads a replaced map, that map lies in some $U_{i,k'}$ with $k'\in S_i(x)$, and then $\|k-k'\|_\infty\le2$. Otherwise all its maps are unchanged and some input cell differs at level $i-1$; by induction that cell is within distance $2$ of $S_{i-1}(x)$, so $\dist(k,S_{i-1}(x))\le3=R$. Then $k$ is within distance $3i$ of $k_0$, the two clipped words are words of $\Psi_i$ with the same maps at two inputs, and since they differ, the marker $(i,k)$ is bad in~$x$; so $k\in S_i(x)$. The cells within distance $2$ of $S_i(x)$ contain at most $(5B)^d|S_i(x)|$ sites, which is \ref{F4} with $c_0=(5B)^d$.
+
+\emph{Extinction.} With the same seeds and two root values, the rows at level $0$ differ only at the root, in the cell $C_{k_0}$. The same induction, now without replaced maps, shows that the rows at level~$i$ differ only in cells of $S_i(x)$: a differing word on $C_k$ has an input cell in $S_{i-1}(x)$ within distance $1$ of $k$, so its marker is a candidate and, by the buffer, bad. If $S_j(x)=\varnothing$ the rows agree, which is \ref{F5}.
+
+\emph{Choice of $H$.} The numbers $R_0$, $D$ and $\Delta_d$ do not depend on $H$, and $\bar p_H\to0$; choose $H$ with $\bar p_H\le1$ and $\tau_*=e\,\Delta_d^{\,2}\,\bar p_H^{1/D}<1$. \Cref{thm:prefix} applies: the PCA is uniformly exponentially ergodic, $\ba$ is the only DLR state, and \eqref{eq:rootd} holds.
+
+\emph{Weak mixing.} Let $\Lam$ be finite, $\tau$ an exterior configuration and $E\subset\Lam$, and put $\ell_n=W+cnH$, so that $w+V_n$ lies within sup-distance $\ell_n$ of $w$. Sample $\gamma^\tau_\Lam$ by the chain rule in increasing time, with a fixed order inside each row. If $w+V_n\subset\Lam$, every previously exposed spin lies outside $w+V_n$, which contains only $w$ in its row and later rows otherwise, and the parents of $w$ are exposed or exterior; so, by consistency of the specification and the tower property, the chain-rule conditional law $K_w$ of $\sigma_w$ satisfies $\dtv(K_w,p(\cdot\mid\text{actual parents}))\le C_0s^n$, by \eqref{eq:rootd}. At each $w\in\Lam$ draw a fresh map $M_w$ independently of the joint past, evaluate it at the actual parents, couple this value maximally with $K_w$, and sample the actual spin from its conditional law given the value. The Gibbs chain rule is then exact, and the maps $M_w$ keep their i.i.d.\ law. Let $\mathcal H$ be the finite union of the backward light cones of the points of $E$, cut off at a time $T_0$ below all the cones $\Gamma$ used below. Draw a reference row of law $\mu$ on the base of $\mathcal H$ at time $T_0$, independently of all maps, and evolve a reference trajectory on $\mathcal H$ with the maps $M_w$ at sites of $\Lam$ and fresh independent maps elsewhere. The set $\mathcal H$ is closed under taking parents, so the reference has the law of $\ba$ there.
+
+Fix $z=(x_z,t_z)\in E$ with $\delta=\dist(z,\Lam^c)$, put $\kappa=\lfloor(\delta-1)/(2r)\rfloor$, and let $n$ be the largest integer with $\ell_n\le(\delta-1)/2$, or $n=0$ if there is none. Let $\Gamma$ be the backward cone of $z$ of depth $\kappa$: the sites $(y,s)$ with $t_z-\kappa<s\le t_z$ and $\|y-x_z\|_\infty\le r(t_z-s)$. Every $w\in\Gamma$ is within sup-distance $r\kappa\le(\delta-1)/2$ of $z$, so $\Gamma\subset\Lam$ and, if $n\ge1$, $w+V_n\subset\Lam$. If no $w\in\Gamma$ has a mismatch $\sigma_w\neq M_w(\text{actual parents})$, the actual spin at $z$ is the depth-$\kappa$ composite of the maps of $\Gamma$ applied to the actual row at time $t_z-\kappa$, and the reference spin is the same composite applied to the reference row; they agree unless that composite is not constant, an event of probability $q_\kappa$ that depends only on the maps of $\Gamma$. No conditioning on the absence of mismatches is used. Hence, when $n\ge1$,
+\[
+\Prob\bigl(\sigma^{\mathrm{actual}}_z\neq\sigma^{\mathrm{ref}}_z\bigr)\;\le\;\kappa\,(2r\kappa+1)^d\,C_0s^{n}+Ce^{-\alpha\kappa},
+\]
+and the trivial bound $1$ holds otherwise. Both $\kappa$ and $n$ grow linearly in $\delta$, so the right side is at most $C_*e^{-c_*\delta}$ after the polynomial factor is absorbed and the constants are enlarged for small $\delta$. The construction is one joint coupling for all targets; a union bound over $z\in E$ gives \eqref{eq:conv}, and the triangle inequality between two exteriors gives \eqref{eq:wsm}. Only the distance to $\Lam^c$ is used, so $\Lam$ need not be connected.
+\end{proof}
+
+Exponential clustering of $\ba$, in the form \eqref{eq:cluster}, also follows from $q_t\le Ce^{-\alpha t}$, by the argument of \cref{prop:cluster} with the composite basic maps in place of the tile flow.
+
+\subsection{Attractive binary PCA}
+
+\begin{corollary}[Attractive binary PCA in every dimension]
+\label{cor:attractive}
+Let $p$ be a finite-range, strictly positive PCA on $\Z^d$, $d\ge1$, with alphabet $\{-1,+1\}$, that is \emph{attractive}: $p(+1\mid u)\le p(+1\mid u')$ whenever $u\le u'$ coordinatewise. Let $\mathbf+$ and $\mathbf-$ be the constant rows and
+\[
+m_t\;=\;(P^t\mathbf+)(\sigma_0=+1)-(P^t\mathbf-)(\sigma_0=+1).
+\]
+The following are equivalent:
+\begin{enumerate}[label=(\alph*)]
+\item the PCA is uniformly exponentially ergodic;
+\item $m_t\le Ce^{-ct}$ for some $C,c>0$;
+\item the space--time specification has arbitrary-volume exponential weak spatial mixing.
+\end{enumerate}
+Under these conditions the specification has exactly one DLR state, $\ba$.
+\end{corollary}
+
+\begin{proof}
+Use the monotone threshold representation: $M(u)=+1$ if $U\le p(+1\mid u)$ and $M(u)=-1$ otherwise, with $U$ uniform on $[0,1]$. It has the law $p$, and every map in its support is nondecreasing. Composites of nondecreasing maps are nondecreasing, and $\eta\mapsto F_t(\eta)(0)$ depends on finitely many coordinates of $\eta$, so it is nonconstant exactly when $F_t(\mathbf-)(0)=-1$ and $F_t(\mathbf+)(0)=+1$. Since $F_t(\mathbf-)(0)\le F_t(\mathbf+)(0)$, this gives
+\[
+q_t\;=\;\Prob\bigl(F_t(\mathbf+)(0)=+1\bigr)-\Prob\bigl(F_t(\mathbf-)(0)=+1\bigr)\;=\;m_t,
+\]
+which is the argument of \cref{prop:monotone}; it does not use the dimension. (a)$\Rightarrow$(b): \eqref{eq:uee} with $I=\{0\}$ bounds the distance of each of $(P^t\mathbf+)_{\{0\}}$ and $(P^t\mathbf-)_{\{0\}}$ from $\mu_{\{0\}}$ by $Ce^{-ct}$, and on two symbols that distance is the difference of the probabilities of $+1$; so $m_t\le2Ce^{-ct}$. (b)$\Rightarrow$(c): $q_t=m_t$, and \cref{cor:basic} applies; it also gives the uniqueness of the DLR state. (c)$\Rightarrow$(a) is \cref{prop:wsm-to-erg}.
+\end{proof}
+
+Thus, for attractive binary PCA, the equivalence of \cref{thm:main} holds in every dimension. By the criterion of Maes and Shlosman recalled in \cref{prob:rate} \cite[Corollary~2, eq.~(4.10)]{MS93}, an $o(t^{-d})$ bound on $m_t$ already forces exponential convergence, and hence~(b). The critical heat-bath PCA of \cref{thm:critical} is attractive and binary with $m_t\ge\frac14(t+1)^{-1/8}$, and it satisfies none of (a)--(c).
+
+\subsection{Scope}
+
+\begin{remark}[What is classical, and what is added]
+\label{rem:higher-credit}
+Several parts of these conclusions are classical, and we claim none of them. For an ergodic PCA in any dimension, the translation-invariant DLR states are the trajectory laws of translation-invariant stationary laws \cite{GKLM89} (\cref{cor:gklm}), so $\ba$ is the only translation-invariant DLR state; when $\ba$ is a finitary factor of an i.i.d.\ process, as coupling from the past \cite{PW96} at every space--time target makes it for a coalescing basic flow, this also follows from \cite[Theorem~2.1]{vdBS99}. Uniqueness among all DLR states, with exponential weak mixing, holds in every dimension wherever the space--time specification satisfies Dobrushin's condition \cite{Dob68} or a Dobrushin--Shlosman block condition \cite{DS85,Weitz05}, in particular at high noise, and disagreement percolation \cite{vdBM94} is another coupling criterion for uniqueness. In $d=1$, \cref{thm:main} covers every PCA to which this section applies, since \ref{F6} implies uniform exponential ergodicity. What this section adds is a hypothesis of a different kind, all-input coalescence of a local flow whose badness probability satisfies the smallness condition \eqref{eq:taud}, which does not ask the table to be close to a product kernel, and conclusions about all DLR states of a strictly positive PCA, with no invariance assumed, together with exponential weak mixing in arbitrary volumes for basic flows. The sources we checked contain no uniqueness statement for all DLR states, and no arbitrary-volume weak mixing statement, for the space--time specification of a positive PCA in $d\ge2$ outside the Dobrushin and Dobrushin--Shlosman regimes, and no argument of the late-cut type of \cref{lem:message,lem:latecut}.
+\end{remark}
+
+\begin{remark}[Weak mixing for general flows]
+\label{rem:tilegeneral}
+For a general flow satisfying \eqref{eq:taud}, \cref{thm:prefix} gives uniqueness of the DLR state but not weak mixing. \Cref{cor:basic} obtains weak mixing from a site-by-site coupling, which needs a basic representation, and in $d=1$ \cref{sec:wsm} obtains it from whole-tile roots. We expect the whole-tile argument to extend to flows on $\Z^d$ that have the tile-root sampling structure of \cref{sec:wsm}, but we have not checked this, and we state it only as a conjecture.
+\end{remark}
+
+% =====================================================================
 \section{Discussion and open problems}
 \label{sec:discussion}
 % =====================================================================
@@ -1291,12 +1630,12 @@ The assumptions of \cref{thm:main} are each used. Positivity makes the cap likel
 
 \begin{problem}[Higher dimensions]
 \label{prob:higher}
-Does uniform exponential ergodicity of a positive finite-range PCA on $\Z^d$, $d\ge2$, imply exponential weak spatial mixing of its space--time specification on $\Z^{d+1}$, and hence all-DLR uniqueness? The converse holds (\cref{prop:wsm-to-erg}). The forward proof above uses one dimension in the imported triangular coupling and in the ancestor sum \eqref{eq:harmonic}, which in $d$ dimensions is bounded by a constant multiple of $\sum_\ell(\ell+1)^{-d}$ and cannot absorb an arbitrary fixed cap cost. This is a limitation of the proof, not a counterexample. \Cref{cor:allDLR} narrows the question: for an ergodic PCA in any dimension, a second DLR state must fail uniform recurrence, so the problem is exactly whether an exponentially ergodic PCA on $\Z^d$, $d\ge2$, can have a boundary-selected space--time Gibbs state of that kind (\cref{rem:notexcluded}). Such an object would be striking; an equivalence in all dimensions would be a clean theorem in the tradition of \cite{DS85,MOS94}.
+Does uniform exponential ergodicity of a positive finite-range PCA on $\Z^d$, $d\ge2$, imply exponential weak spatial mixing of its space--time specification on $\Z^{d+1}$, and hence all-DLR uniqueness? The converse holds (\cref{prop:wsm-to-erg}). The cap cost is no longer the obstruction: the ancestor sum \eqref{eq:harmonic} is bounded in $d\ge2$, but \cref{thm:prefix} charges the cap at a late level instead and removes it in every dimension once a coalescing local flow satisfying \eqref{eq:taud} is available, and \cref{cor:basic,cor:attractive} give the full conclusion when a basic representation coalesces exponentially for all inputs and for attractive binary tables. One sufficient route to the all-DLR uniqueness part is to construct, from uniform exponential ergodicity, a flow satisfying \ref{F1}--\ref{F6} and \eqref{eq:taud}. For general flows, exponential weak mixing remains an additional question, as discussed in \cref{rem:tilegeneral}. In $d=1$, B\'erard's coupling supplies such a flow (\cref{prop:berard,rem:flowhyp}). A given basic representation is not enough in general: B\'erard's PCA \cite{Berard22} is uniformly exponentially ergodic \cite[Proposition~1]{Berard22} and yet, for $p_{\mathrm B}$ close to $1$, has no successful basic i.i.d.\ nearest-neighbour coupling \cite[Theorem~1]{Berard22} (\cref{rem:berard22}); so uniform exponential ergodicity does not by itself yield a coalescing basic representation, and in $d\ge2$, as in $d=1$, a flow would have to be built from the table rather than from a given representation. \Cref{cor:allDLR} narrows the question: for an ergodic PCA in any dimension, a second DLR state must fail uniform recurrence, so the all-DLR uniqueness part of the problem is exactly whether an exponentially ergodic PCA on $\Z^d$, $d\ge2$, can have a boundary-selected space--time Gibbs state of that kind (\cref{rem:notexcluded}). Such an object would be striking; an equivalence in all dimensions would be a clean theorem in the tradition of \cite{DS85,MOS94}.
 \end{problem}
 
 \begin{problem}[Rates]
 \label{prob:rate}
-Does uniqueness of the DLR state of the space--time specification imply \emph{exponential} ergodicity? \Cref{thm:qualitative} gives uniform local convergence without a rate. For attractive binary PCA on $\Z^d$, an $o(n^{-d})$ difference between the single-site probabilities started from the all-plus and all-minus rows already forces exponential convergence \cite[Corollary~2, eq.~(4.10)]{MS93}. Whether an intermediate rate can occur at all for positive finite-range PCA, and whether all-DLR uniqueness excludes it, is open.
+Does uniqueness of the DLR state of the space--time specification imply \emph{exponential} ergodicity? \Cref{thm:qualitative} gives uniform local convergence without a rate. For attractive binary PCA on $\Z^d$, an $o(n^{-d})$ difference between the single-site probabilities started from the all-plus and all-minus rows already forces exponential convergence \cite[Corollary~2, eq.~(4.10)]{MS93}. Intermediate rates do occur for positive finite-range PCA in every dimension $d\ge2$: the critical heat-bath PCA of \cref{thm:critical} is uniformly ergodic, and its one-site distance at time $t$ is at least $\frac14(t+1)^{-1/8}$ (\cref{rem:critical}). Two questions remain. In $d=1$: is every ergodic positive PCA on $\Z$ exponentially ergodic? If so, then by \cref{thm:qualitative,thm:main} all-DLR uniqueness, ergodicity and exponential weak mixing coincide on $\Z$. In $d\ge2$: does the space--time specification of the critical PCA on $\Z^3$ have a DLR state that is not uniformly recurrent? By \cref{cor:allDLR} it has exactly one DLR state unless it has such a state, and if it has none, uniqueness does not imply exponential ergodicity.
 \end{problem}
 
 \begin{problem}[Certificate depth]
@@ -1309,21 +1648,25 @@ For a uniformly exponentially ergodic positive table, \cref{prop:fixed-pair} is 
 For the family \eqref{eq:mst}, \cref{cor:mst-low} is pointwise in the noise: the constants $C_\eps,c_\eps$ and the threshold $\eps_0$ are not computed, and $h$ in \ref{M2} need not be uniform as $\eps\downarrow0$. A computed $\eps_0$, or an explicit coalescence certificate for one small rational noise, would make the reentrant family of \cref{cor:reentrant} fully effective.
 \end{problem}
 
-Two remarks on scope. First, the result is about the normalized interaction of the dynamics, with the future as a genuine boundary; it says nothing about the spatial Gibbs measure that a reversible dynamics samples, to which Maes and Shlosman apply their criterion \cite[Section~4, Example~3]{MS91}. Second, the forward proof never uses that a basic representation coalesces, and this is not a technicality: for the ergodic PCA of \cite{Berard22} the single-site maps do not coalesce, the coefficient $q_t$ of that representation does not decay, and yet, if that PCA is exponentially ergodic, \cref{thm:main} applies to it through the whole-history tiles.
+Two remarks on scope. First, the result is about the normalized interaction of the dynamics, with the future as a genuine boundary; it says nothing about the spatial Gibbs measure that a reversible dynamics samples, to which Maes and Shlosman apply their criterion \cite[Section~4, Example~3]{MS91}. Second, the one-dimensional forward proof never uses that a basic representation coalesces, and this is not a technicality: the PCA of \cite{Berard22} is uniformly exponentially ergodic \cite[Proposition~1]{Berard22}, yet for $p_{\mathrm B}$ close to $1$ none of its basic i.i.d.\ nearest-neighbour representations coalesces \cite[Theorem~1]{Berard22}, so the coefficient $q_t$ of every such representation does not tend to zero; \cref{thm:main} applies to it through the whole-history tiles (\cref{rem:berard22}). The higher-dimensional corollaries of \cref{sec:higher} do use coalescence of a given representation (\cref{cor:basic,cor:attractive}); \cref{thm:prefix} replaces it by a general flow satisfying \eqref{eq:taud}.
 
 % =====================================================================
 \section*{Credit}
 \addcontentsline{toc}{section}{Credit}
 % =====================================================================
 
-The translation-invariant correspondence between stationary PCA laws and space--time Gibbs measures is Goldstein, Kuik, Lebowitz and Maes' \cite{GKLM89}, and its statistical-mechanical development is Lebowitz, Maes and Speer's \cite{LMS90}. The constructive ergodicity criteria and the contraction argument behind \cref{prop:fixed-pair} are Maes and Shlosman's \cite{MS91,MS93}; \cref{prop:fixed-pair} is an elementary finite-alphabet instance of their method. They also state a variational converse \cite[Theorem~2]{MS91}. The past-only conditions that, through \cref{thm:main}, characterize in one dimension the region of all-DLR uniqueness with exponential mixing (Problem~4 of \cite{LMS90}) are theirs; \cref{prop:past-certificate} establishes their necessity for positive one-dimensional PCA using B\'erard's triangular coupling \cite[Lemma~8]{Berard23}. The observation that the Dobrushin--Shlosman condition for the space--time interaction gives a unique invariant measure is also Maes and Shlosman's \cite[p.~235]{MS91}. The local coupling from the past, the couplings of complete histories on triangular tiles, and the exponential coalescence of their composition are B\'erard's \cite{Berard23}; the example showing that ergodicity does not imply a successful basic coupling is also his \cite{Berard22}. The block criterion and its coupling proof are Dobrushin and Shlosman's \cite{DS85} and Weitz's \cite{Weitz05}; the upgrade from weak to strong mixing in two dimensions is Martinelli, Olivieri and Schonmann's \cite{MOS94}. The reentrant automaton and its low-noise exploration are Marsan, Sablik and T\"orm\"a's \cite{MST26}. The finite-volume adapter, the cap comparison, the identification of all DLR states, the whole-tile chain-rule coupling, the converses of \cref{sec:converse}, the monotone identity, and the computations are proved here. In \cref{sec:defect}, the proof that ergodic positive PCA are uniformly ergodic is Halawi's \cite{Halawi22}; the surface defect bound and its consequences are proved here. The comparison of the specification with the forward kernel by relative entropy is elementary and may well appear elsewhere; we have not found it, and we have not checked the full texts of \cite{KV80,Toom90} for it. Its key estimate, that the finite-volume partition function of the normalized interaction lies between $p_-^{|\partial_+\Lam|}$ and $1$ for every boundary condition, is the observation of Lebowitz, Maes and Speer \cite[Section~1.3]{LMS90} that the free energy is of the order of the boundary for any boundary condition. The present results have been compared with the full texts of \cite{MS91,MS93,LMS90}.
+The translation-invariant correspondence between stationary PCA laws and space--time Gibbs measures is Goldstein, Kuik, Lebowitz and Maes' \cite{GKLM89}, and its statistical-mechanical development is Lebowitz, Maes and Speer's \cite{LMS90}. The constructive ergodicity criteria and the contraction argument behind \cref{prop:fixed-pair} are Maes and Shlosman's \cite{MS91,MS93}; \cref{prop:fixed-pair} is an elementary finite-alphabet instance of their method. They also state a variational converse \cite[Theorem~2]{MS91}. The past-only conditions that, through \cref{thm:main}, characterize in one dimension the region of all-DLR uniqueness with exponential mixing (Problem~4 of \cite{LMS90}) are theirs; \cref{prop:past-certificate} establishes their necessity for positive one-dimensional PCA using B\'erard's triangular coupling \cite[Lemma~8]{Berard23}. The observation that the Dobrushin--Shlosman condition for the space--time interaction gives a unique invariant measure is also Maes and Shlosman's \cite[p.~235]{MS91}. The local coupling from the past, the couplings of complete histories on triangular tiles, and the exponential coalescence of their composition are B\'erard's \cite{Berard23}; the example showing that uniform exponential ergodicity does not imply a successful basic coupling is also his \cite[Proposition~1 and Theorem~1]{Berard22}. The block criterion and its coupling proof are Dobrushin and Shlosman's \cite{DS85} and Weitz's \cite{Weitz05}; the upgrade from weak to strong mixing in two dimensions is Martinelli, Olivieri and Schonmann's \cite{MOS94}. The reentrant automaton and its low-noise exploration are Marsan, Sablik and T\"orm\"a's \cite{MST26}. The finite-volume adapter, the cap comparison, the identification of all DLR states, the whole-tile chain-rule coupling, the converses of \cref{sec:converse}, the monotone identity, and the computations are proved here. In \cref{sec:defect}, the proof that ergodic positive PCA are uniformly ergodic is Halawi's \cite{Halawi22}; the surface defect bound and its consequences are proved here. The comparison of the specification with the forward kernel by relative entropy is elementary and may well appear elsewhere; we have not found it, and we have not checked the full texts of \cite{KV80,Toom90} for it. Its key estimate, that the finite-volume partition function of the normalized interaction lies between $p_-^{|\partial_+\Lam|}$ and $1$ for every boundary condition, is the observation of Lebowitz, Maes and Speer \cite[Section~1.3]{LMS90} that the free energy is of the order of the boundary for any boundary condition. The present results have been compared with the full texts of \cite{MS91,MS93,LMS90}.
+
+For \cref{sec:higher}: the translation-invariant part of its conclusions is classical \cite{GKLM89,LMS90}, and also follows from van den Berg and Steif's theorem \cite[Theorem~2.1]{vdBS99} under a finitary space--time coding, which coupling from the past \cite{PW96} at every space--time target supplies for a coalescing basic flow; for monotone exponentially ergodic PCA they construct a finitary coding of the stationary row law \cite[Theorem~3.4]{vdBS99}; all-DLR uniqueness and exponential weak mixing under the conditions of Dobrushin and of Dobrushin and Shlosman are theirs \cite{Dob68,DS85}, with Weitz's coupling form \cite{Weitz05}, and disagreement percolation is van den Berg and Maes's \cite{vdBM94}. The flow hypotheses of \cref{def:flow}, the duration-free messages, the fixed-prefix bound, the late cut, and the corollaries for basic flows and attractive binary PCA are proved here; they build on the cap comparison of \cref{sec:cap}. For \cref{sec:critical}: the exact formulas \ref{I1} and \ref{I2} are classical \cite{Yang52,Chang52,BGJS73,AML73,Baxter11,MPW63,MW73}, with the accessible statement of \ref{I2} in \cite{LyM07}; the Toeplitz asymptotic method for row correlations is Wu's \cite{Wu66}; Griffiths' inequalities \cite{Gri67,KS68}, the theorem of Aizenman and Higuchi for equal couplings \cite{Aiz80,Hig81} and Cauchy's determinant identity are classical; the phenomenon of slow relaxation at a critical point is classical \cite{Holley85,MS93,LS12}, and the synchronous heat-bath dynamics has been studied in \cite{KV80,DLR02,CNP01}. The reduction of the dynamics to \ref{I1} and \ref{I2} and the explicit constant are proved here. In the material added in version~1.2.0 the following citations were recalled or checked at the level of their abstracts, and the statements attributed to them are still to be verified against their full texts: \cite{GKLM89,DS85,Weitz05,Dob68,vdBM94,PW96,BMM13,HS00,Spinka20,Holley85,LS12,KV80,DLR02,CNP01,Yang52,Chang52,BGJS73,AML73,Baxter11,MPW63,MW73,Wu66,Gri67,KS68,Aiz80,Hig81}. The theorem numbers cited from \cite{vdBS99} were read in its preprint version.
 
 % =====================================================================
 \section*{How this work was done}
 \addcontentsline{toc}{section}{How this work was done}
 % =====================================================================
 
-The authors chose the question, directed the work and judged every result. AI models from more than one developer explored the problem, derived and drafted the arguments, and wrote and ran the computations, building on and challenging each other's results. The cap comparison went through several versions; the fixed-cluster resampling of \cref{sec:resample} replaced an earlier argument that resampled a random cluster and asserted its independence. Model reviewers checked the arguments outside \cref{sec:defect}, refutation-first and then step by step, and the findings were fixed and re-checked. The exact computations of \cref{sec:majority} were implemented by two different algorithms, enumeration of the innovation field and a row transfer, which agree at every tested point, and a separate program, sharing no code, re-derives every entry of \cref{tab:majority}. \Cref{sec:defect} was derived separately and checked refutation-first by a separate model reviewer; its surface bound was also tested numerically on every subset of small space--time windows. Models are not listed as authors; the authors take responsibility for every claim.
+The authors chose the question, directed the work and judged every result. AI models from more than one developer explored the problem, derived and drafted the arguments, and wrote and ran the computations, building on and challenging each other's results. The cap comparison went through several versions; the fixed-cluster resampling of \cref{sec:resample} replaced an earlier argument that resampled a random cluster and asserted its independence. Model reviewers checked the arguments outside \cref{sec:defect}, refutation-first and then step by step, and the findings were fixed and re-checked. The exact computations of \cref{sec:majority} were implemented by two different algorithms, enumeration of the innovation field and a row transfer, which agree at every tested point, and a separate program, sharing no code, re-derives every entry of \cref{tab:majority}. \Cref{sec:defect} was derived separately and checked refutation-first by a separate model reviewer; its surface bound was also tested numerically on every subset of small space--time windows.
+
+Version~1.2.0 adds \cref{sec:critical,sec:higher}. The prefix-cap theorem and its corollary for basic flows were derived by a run of OpenAI's GPT-6.1~Sol, with audits inside the run, and the critical example was derived by a separate run of the same model. Anthropic's Claude Opus~5.5, a model of the other developer, checked both refutation-first; for the prefix-cap theorem a separate run of the same model also attacked the load-bearing steps without seeing the first check. Claude Opus~5.5 also ran exact computations on the algebraic ingredients (the cap identity with all exterior-child factors and the message bound of \cref{lem:message}, on small examples in $d=1$ and $d=2$; the table of \cref{thm:critical}, the Cauchy determinant, the Fourier coefficients, the low-temperature Toeplitz limits and the constants of \cref{lem:ising}), made a registered Monte Carlo refutation attempt on the lower bound of \cref{thm:critical} with a control, and ran a priority sweep. These checks found no false step. They led to the statement-level changes made here: the explicit hypotheses of \cref{def:flow}, including the slab Markov property, the uniformity over root positions and the speed and buffer; the identification of the unique DLR state through the exponential coalescence; the display of \ref{I2} and the primary citations; and the credit in \cref{rem:higher-credit,sec:critical}. Claude Opus~5.5 wrote this version. \Cref{cor:attractive}, the clustering sentence after \cref{cor:basic}, the application of \cref{thm:prefix} to B\'erard's flow in \cref{rem:flowhyp}, \cref{rem:critical}(b), and two simplifications in \cref{sec:critical} (the right-continuity step in \cref{lem:ising}\ref{it:i2}, and the use of the magnetization alone, without uniqueness of the critical Gibbs state, in \cref{thm:critical}\ref{it:c1}) were written for this version and were at first checked only by their author. These six additions, with the rest of the written version, then received an independent cross-family check by a separate run of OpenAI's GPT-6.1~Sol, refutation-first, with independently written computations that reproduced the shipped outputs. It confirmed the mathematical arguments of the six additions and found one scope gap: the introductory summaries of the general-flow result omitted the smallness condition \eqref{eq:taud} of \cref{thm:prefix}, which this version restores wherever that result is summarized. It also led to local corrections, made here: the coalescence rate is separated from the lateral speed, and a positive badness bound is used, in the proof of \cref{cor:basic}; the all-DLR uniqueness part of \cref{prob:higher} is separated from its weak-mixing part; a sentence on general boundary conditions for the anisotropic Ising model is restricted to equal couplings and is not used; $R_0$ is stated to be an integer in \cref{def:flow}; and citation pinpoints and scopes are made precise. Models are not listed as authors; the authors take responsibility for every claim.
 
 % =====================================================================
 \section*{Verification status}
@@ -1331,11 +1674,11 @@ The authors chose the question, directed the work and judged every result. AI mo
 % =====================================================================
 
 \begin{itemize}
-\item \textbf{Proved in the text.} \Cref{lem:halfspace}, \cref{thm:main} with \cref{lem:clip,lem:splice,lem:root,lem:tile}, \cref{prop:wsm,prop:cluster}, \cref{prop:fixed-pair,prop:common-map,prop:computable,prop:monotone,prop:open}, \cref{prop:wsm-to-erg}, \cref{thm:qualitative}, \cref{cor:nonerg}, \cref{thm:defect} with \cref{lem:zerodefect,lem:lsc}, \cref{cor:gklm}, \cref{thm:recurrent}, \cref{prop:halawi}, \cref{lem:entrance}, \cref{thm:simplex}, \cref{cor:finitephase,cor:allDLR}, \cref{lem:additive}, \cref{prop:clocks}, the bounds of \cref{sec:highnoise,sec:other} with \cref{prop:product}, and \cref{thm:equilibrium}, \cref{prop:past-certificate} and \cref{cor:ds-ms} given their cited inputs. \Cref{thm:simplex}\ref{it:s3} uses the uniqueness of the extremal decomposition of DLR states \cite[Theorem~7.26]{Georgii11}.
-\item \textbf{Imported with stated scope.} B\'erard's construction, as \cref{prop:berard}, and his boundary-uniform upward-triangle coupling \cite[Lemma~8]{Berard23} used in \cref{prop:past-certificate}; the structural inputs \ref{M1}--\ref{M3} of Marsan, Sablik and T\"orm\"a's low-noise proof, which are not re-derived here, so that \cref{cor:mst-low,cor:reentrant} and Theorem~E are conditional on them; the Dobrushin--Shlosman criterion, the Martinelli--Olivieri--Schonmann theorem, and the Main Theorem of \cite{MS91}, used in \cref{cor:ds-ms}.
-\item \textbf{Checked by machine.} The polynomials and all numbers of \cref{tab:majority}, in exact rational arithmetic, by two different algorithms; recorded outputs and their checksum are in the reproducibility package. No floating-point value enters a stated certificate.
+\item \textbf{Proved in the text.} \Cref{lem:halfspace}, \cref{thm:main} with \cref{lem:clip,lem:splice,lem:root,lem:tile}, \cref{prop:wsm,prop:cluster}, \cref{prop:fixed-pair,prop:common-map,prop:computable,prop:monotone,prop:open}, \cref{prop:wsm-to-erg}, \cref{thm:qualitative}, \cref{cor:nonerg}, \cref{thm:defect} with \cref{lem:zerodefect,lem:lsc}, \cref{cor:gklm}, \cref{thm:recurrent}, \cref{prop:halawi}, \cref{lem:entrance}, \cref{thm:simplex}, \cref{cor:finitephase,cor:allDLR}, \cref{lem:additive}, \cref{prop:clocks}, the bounds of \cref{sec:highnoise,sec:other} with \cref{prop:product}, and \cref{thm:equilibrium}, \cref{prop:past-certificate} and \cref{cor:ds-ms} given their cited inputs. \Cref{thm:simplex}\ref{it:s3} uses the uniqueness of the extremal decomposition of DLR states \cite[Theorem~7.26]{Georgii11}. Added in version~1.2.0: \cref{thm:prefix} with \cref{lem:message,lem:prefix,lem:latecut}, for any flow satisfying \cref{def:flow} and \eqref{eq:taud}; \cref{cor:basic,cor:attractive}; and \cref{lem:ising}, \cref{thm:critical} and \cref{rem:critical}, given \ref{I1} and \ref{I2}.
+\item \textbf{Imported with stated scope.} B\'erard's construction, as \cref{prop:berard}, and his boundary-uniform upward-triangle coupling \cite[Lemma~8]{Berard23} used in \cref{prop:past-certificate}; the structural inputs \ref{M1}--\ref{M3} of Marsan, Sablik and T\"orm\"a's low-noise proof, which are not re-derived here, so that \cref{cor:mst-low,cor:reentrant} and Theorem~E are conditional on them; the Dobrushin--Shlosman criterion, the Martinelli--Olivieri--Schonmann theorem, and the Main Theorem of \cite{MS91}, used in \cref{cor:ds-ms}. The exact Ising formulas \ref{I1} and \ref{I2}, with Griffiths' inequalities and Wallis' product; \cref{lem:ising}, \cref{thm:critical} and Theorem~G are conditional on \ref{I1} and \ref{I2}. \Cref{thm:prefix} assumes a coalescing local flow satisfying \eqref{eq:taud}; in $d\ge2$ such a flow is constructed here only from an exponentially coalescing basic representation (\cref{cor:basic}).
+\item \textbf{Checked by machine.} The polynomials and all numbers of \cref{tab:majority}, in exact rational arithmetic, by two different algorithms; recorded outputs and their checksum are in the reproducibility package. No floating-point value enters a stated certificate. For version~1.2.0, exact computations of the cap identity, with all exterior-child factors, and of the message bound of \cref{lem:message} on small examples in $d=1$ and $d=2$; the table of \cref{thm:critical}, Cauchy's identity in exact rational arithmetic for $n\le14$, and numerical checks of the Fourier coefficients, of the low-temperature Toeplitz determinants and of the constants of \cref{lem:ising}; and a Monte Carlo test of \eqref{eq:critbound} with a control. The cross-family check of the written version reran these version~1.2.0 programs, whose outputs matched the recorded ones, and checked the same ingredients with independently written programs. These support the proofs and are not part of them.
 \item \textbf{Not formalized.} Nothing is verified in Lean.
-\item \textbf{Internal only.} Every audit is internal; none of it is journal peer review.
+\item \textbf{Internal only.} Every audit is internal, including the cross-family check of the written version described in ``How this work was done''; none of it is journal peer review.
 \end{itemize}
 
 % =====================================================================
@@ -1350,26 +1693,50 @@ The \texttt{verification/} directory of the accompanying repository contains:
 \item \texttt{code/majority\_certificates\_output.txt} and \texttt{.json}: the recorded outputs. The script prints the SHA-256 digest of the text output; \texttt{code/SHA256SUMS} records the digests of the script and of both outputs.
 \item \texttt{independent/table2\_check.py}: a separate program, sharing no code with the first, that re-derives every entry of \cref{tab:majority} by an exact integer transfer over the backward light cone, checks that each $\eps_L$ is the first passing grid point, and compares the results with the recorded outputs; it runs in seconds.
 \end{itemize}
-Running \texttt{python3 majority\_certificates.py 7} reproduces every number in \cref{tab:majority}; depth six takes about half a minute and depth seven about twenty minutes on a laptop, almost all of it in the exact rational evaluation. The paper builds from \texttt{paper/main.tex} with \texttt{pdflatex}, by \texttt{python -B build.py} in \texttt{paper/}; no computation is used in any proof.
+Running \texttt{python3 majority\_certificates.py 7} reproduces every number in \cref{tab:majority}; depth six takes about half a minute and depth seven about twenty minutes on a laptop, almost all of it in the exact rational evaluation.
+
+The subdirectory \texttt{verification/v1.2/}, added in version~1.2.0, contains three further programs, their recorded outputs and resource receipts, and a guide \texttt{VERIFY.md}:
+\begin{itemize}
+\item \texttt{check\_cap\_identity\_and\_messages.py}: for binary PCA with random strictly positive tables and a random exterior, on the minimal expanding volumes above one root in $d=1$ and $d=2$, it computes the root marginal of the finite-volume specification by brute force from the full product \eqref{eq:spec} and compares it with the cap identity evaluated by a forward transfer; checks that every exterior child lies in the cap row; and checks the bound of \cref{lem:message} for all pairs of rows at Hamming distance one, at every intermediate level. Four cases with three seeds each; in one case, of longer duration, only the transfer side and the message bound are computed. A few seconds in all.
+\item \texttt{check\_algebra.py}: the nine values and the criticality of the table of \cref{thm:critical}; Cauchy's identity for $\det[1/(j-i+\frac12)]$ in exact rational arithmetic for $n\le14$; the Fourier coefficients $a_m(1)$ by quadrature; the low-temperature Toeplitz determinants of \ref{I2} at $k=0.5,0.9,0.999$ for $N\le8$, which at $k=0.5$ approach $(1-k^2)^{1/4}$, the square of the magnetization in \ref{I1}, and near $k=1$ approach the critical product; and the constants of \cref{lem:ising}\ref{it:i3}, including $\min_{n\le2\cdot10^5}\bigl(\log C_n+\frac14\log n+1\bigr)>0$. About a second.
+\item \texttt{check\_critical\_mc.py}: a Monte Carlo refutation attempt on \eqref{eq:critbound}, registered in the program's header before it was run. It runs the synchronous dynamics of \cref{thm:critical} on a $1024\times1024$ torus from all~$+1$, two seeds, up to $t=400$, and a control with both couplings multiplied by $0.9$. At the critical couplings the estimated $m_t$ stays far above the bound ($m_{400}\approx0.683$ against $0.217$) and decays slowly; the control falls below the bound by $t=200$, so the test can detect fast decay. About a minute.
+\end{itemize}
+The paper builds from \texttt{paper/main.tex} with \texttt{pdflatex}, by \texttt{python -B build.py} in \texttt{paper/}; no computation is used in any proof.
 
 % =====================================================================
 \begin{thebibliography}{99}
 \addcontentsline{toc}{section}{References}
 \small
 
-\bibitem{Berard22} J.~B\'erard. A probabilistic cellular automaton that admits no successful basic i.i.d.\ coupling. Preprint, arXiv:2207.14569 (2022), Theorem~1.
+\bibitem{AML73} D.~B.~Abraham and A.~Martin-L\"of. The transfer matrix for a pure phase in the two-dimensional Ising model. \emph{Comm.\ Math.\ Phys.} 32 (1973), 245--268.
+
+\bibitem{Aiz80} M.~Aizenman. Translation invariance and instability of phase coexistence in the two dimensional Ising system. \emph{Comm.\ Math.\ Phys.} 73 (1980), 83--94.
+
+\bibitem{Baxter11} R.~J.~Baxter. Onsager and Kaufman's calculation of the spontaneous magnetization of the Ising model. \emph{J.\ Stat.\ Phys.} 145 (2011), 518--548. arXiv:1103.3347.
+
+\bibitem{BGJS73} G.~Benettin, G.~Gallavotti, G.~Jona-Lasinio and A.~L.~Stella. On the Onsager--Yang value of the spontaneous magnetization. \emph{Comm.\ Math.\ Phys.} 30 (1973), 45--54.
+
+\bibitem{Berard22} J.~B\'erard. A probabilistic cellular automaton that admits no successful basic i.i.d.\ coupling. Preprint, arXiv:2207.14569 (2022). Theorem~1, and Section~4.1, Proposition~1.
 
 \bibitem{Berard23} J.~B\'erard. Coupling from the past for exponentially ergodic one-dimensional probabilistic cellular automata. \emph{Electron.\ J.\ Probab.} 28 (2023), 17 pp. \href{https://doi.org/10.1214/23-EJP1013}{doi:10.1214/23-EJP1013}; arXiv:2106.07219v2. Theorem~1, Section~3.2, Lemmas~8 and~9, and the proof of Theorem~1.
 
 \bibitem{Borgs84} C.~Borgs. Translation symmetry breaking in four dimensional lattice gauge theories. \emph{Comm.\ Math.\ Phys.} 96 (1984), 251--284.
 
+\bibitem{BMM13} A.~Bu\v{s}i\'c, J.~Mairesse and I.~Marcovici. Probabilistic cellular automata, invariant measures, and perfect sampling. \emph{Adv.\ Appl.\ Probab.} 45 (2013), 960--980. arXiv:1010.3133.
+
+\bibitem{Chang52} C.~H.~Chang. The spontaneous magnetization of a two-dimensional rectangular Ising model. \emph{Phys.\ Rev.} 88 (1952), 1422.
+
 \bibitem{CM11} P.~Chassaing and J.~Mairesse. A non-ergodic probabilistic cellular automaton with a unique invariant measure. \emph{Stochastic Process.\ Appl.} 121 (2011), 2474--2487.
 
 \bibitem{CRU25} J.-R.~Chazottes, F.~Redig and E.~Ugalde. Gaussian concentration bounds for probabilistic cellular automata. \emph{J.\ Stat.\ Phys.} 192 (2025), 169. \href{https://doi.org/10.1007/s10955-025-03552-4}{doi:10.1007/s10955-025-03552-4}.
 
+\bibitem{CNP01} E.~N.~M.~Cirillo, F.~R.~Nardi and A.~D.~Polosa. Magnetic order in the Ising model with parallel dynamics. \emph{Phys.\ Rev.\ E} 64 (2001), 057103. arXiv:cond-mat/0104529.
+
 \bibitem{DK84} E.~Domany and W.~Kinzel. Equivalence of cellular automata to Ising models and directed percolation. \emph{Phys.\ Rev.\ Lett.} 53 (1984), 311--314.
 
 \bibitem{DLR02} P.~Dai Pra, P.-Y.~Louis and S.~R\oe lly. Stationary measures and phase transition for a class of probabilistic cellular automata. \emph{ESAIM Probab.\ Stat.} 6 (2002), 89--104.
+
+\bibitem{Dob68} R.~L.~Dobrushin. The description of a random field by means of conditional probabilities and conditions of its regularity. \emph{Theory Probab.\ Appl.} 13 (1968), 197--224.
 
 \bibitem{DS85} R.~L.~Dobrushin and S.~B.~Shlosman. Constructive criterion for the uniqueness of Gibbs field. In \emph{Statistical Physics and Dynamical Systems}, Progress in Physics 10, Birkh\"auser (1985), 347--370.
 
@@ -1377,7 +1744,17 @@ Running \texttt{python3 majority\_certificates.py 7} reproduces every number in 
 
 \bibitem{Georgii11} H.-O.~Georgii. \emph{Gibbs Measures and Phase Transitions}, 2nd ed. De Gruyter Studies in Mathematics 9, de Gruyter, Berlin (2011). Theorem~7.26.
 
+\bibitem{Gri67} R.~B.~Griffiths. Correlations in Ising ferromagnets.~I. \emph{J.\ Math.\ Phys.} 8 (1967), 478--483.
+
 \bibitem{Halawi22} A.~Halawi. \emph{Asymptotic behaviour of probabilistic cellular automata}. MS thesis, American University of Beirut (2022). \url{https://scholarworks.aub.edu.lb/handle/10938/23549}. Theorem~4.2.3 and Proposition~4.2.4.
+
+\bibitem{HS00} O.~H\"aggstr\"om and J.~E.~Steif. Propp--Wilson algorithms and finitary codings for high noise Markov random fields. \emph{Combin.\ Probab.\ Comput.} 9 (2000), 425--439.
+
+\bibitem{Hig81} Y.~Higuchi. On the absence of non-translation invariant Gibbs states for the two-dimensional Ising model. In \emph{Random Fields (Esztergom, 1979)}, J.~Fritz, J.~L.~Lebowitz and D.~Sz\'asz (eds.), Colloq.\ Math.\ Soc.\ J\'anos Bolyai 27, North-Holland, Amsterdam (1981), 517--534.
+
+\bibitem{Holley85} R.~Holley. Possible rates of convergence in finite range, attractive spin systems. In \emph{Particle Systems, Random Media and Large Deviations}, Contemp.\ Math.\ 41, Amer.\ Math.\ Soc., Providence (1985), 215--234.
+
+\bibitem{KS68} D.~G.~Kelly and S.~Sherman. General Griffiths' inequalities on correlations in Ising ferromagnets. \emph{J.\ Math.\ Phys.} 9 (1968), 466--484.
 
 \bibitem{Kunsch84} H.~K\"unsch. Time reversal and stationary Gibbs measures. \emph{Stochastic Process.\ Appl.} 17 (1984), 159--166.
 
@@ -1388,6 +1765,10 @@ Running \texttt{python3 majority\_certificates.py 7} reproduces every number in 
 \bibitem{LMS90} J.~L.~Lebowitz, C.~Maes and E.~R.~Speer. Statistical mechanics of probabilistic cellular automata. \emph{J.\ Stat.\ Phys.} 59 (1990), 117--170.
 
 \bibitem{Louis04} P.-Y.~Louis. Ergodicity of PCA: equivalence between spatial and temporal mixing conditions. \emph{Electron.\ Comm.\ Probab.} 9 (2004), 119--131.
+
+\bibitem{LS12} E.~Lubetzky and A.~Sly. Critical Ising on the square lattice mixes in polynomial time. \emph{Comm.\ Math.\ Phys.} 313 (2012), 815--836. arXiv:1001.1613.
+
+\bibitem{LyM07} I.~Lyberg and B.~M.~McCoy. Form factor expansion of the row and diagonal correlation functions of the two-dimensional Ising model. \emph{J.\ Phys.\ A: Math.\ Theor.} 40 (2007), 3329--3346. arXiv:math-ph/0612051; equations~(8)--(12), numbered as in the arXiv version.
 
 \bibitem{MS91} C.~Maes and S.~B.~Shlosman. Ergodicity of probabilistic cellular automata: a constructive criterion. \emph{Comm.\ Math.\ Phys.} 135 (1991), 233--251.
 
@@ -1403,7 +1784,23 @@ Running \texttt{python3 majority\_certificates.py 7} reproduces every number in 
 
 \bibitem{MOS94} F.~Martinelli, E.~Olivieri and R.~H.~Schonmann. For 2-D lattice spin systems weak mixing implies strong mixing. \emph{Comm.\ Math.\ Phys.} 165 (1994), 33--47.
 
+\bibitem{MPW63} E.~W.~Montroll, R.~B.~Potts and J.~C.~Ward. Correlations and spontaneous magnetization of the two-dimensional Ising model. \emph{J.\ Math.\ Phys.} 4 (1963), 308--322.
+
+\bibitem{MW73} B.~M.~McCoy and T.~T.~Wu. \emph{The Two-Dimensional Ising Model}. Harvard University Press, Cambridge, MA (1973).
+
+\bibitem{PW96} J.~G.~Propp and D.~B.~Wilson. Exact sampling with coupled Markov chains and applications to statistical mechanics. \emph{Random Structures Algorithms} 9 (1996), 223--252.
+
+\bibitem{Spinka20} Y.~Spinka. Finitary codings for spatial mixing Markov random fields. \emph{Ann.\ Probab.} 48 (2020), 1557--1591. arXiv:1803.10578.
+
+\bibitem{vdBM94} J.~van den Berg and C.~Maes. Disagreement percolation in the study of Markov fields. \emph{Ann.\ Probab.} 22 (1994), 749--763.
+
+\bibitem{vdBS99} J.~van den Berg and J.~E.~Steif. On the existence and nonexistence of finitary codings for a class of random fields. \emph{Ann.\ Probab.} 27 (1999), 1501--1522. Theorems~2.1 and~3.4, numbered as in the preprint version.
+
 \bibitem{Weitz05} D.~Weitz. Combinatorial criteria for uniqueness of Gibbs measures. \emph{Random Structures Algorithms} 27 (2005), 445--475.
+
+\bibitem{Wu66} T.~T.~Wu. Theory of Toeplitz determinants and the spin correlations of the two-dimensional Ising model.~I. \emph{Phys.\ Rev.} 149 (1966), 380--401.
+
+\bibitem{Yang52} C.~N.~Yang. The spontaneous magnetization of a two-dimensional Ising model. \emph{Phys.\ Rev.} 85 (1952), 808--816.
 
 \bibitem{Toom90} A.~L.~Toom, N.~B.~Vasilyev, O.~N.~Stavskaya, L.~G.~Mityushin, G.~L.~Kurdyumov and S.~A.~Pirogov. Discrete local Markov systems. In \emph{Stochastic Cellular Systems: Ergodicity, Memory, Morphogenesis}, R.~L.~Dobrushin, V.~I.~Kryukov and A.~L.~Toom (eds.), Manchester University Press (1990), 1--182.
 

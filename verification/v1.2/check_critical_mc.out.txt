@@ -1,0 +1,21 @@
+== critical
+t=   1  m_t=0.9461  claimed lower bound=0.4358  ok=True
+t=   2  m_t=0.9175  claimed lower bound=0.4089  ok=True
+t=   5  m_t=0.8747  claimed lower bound=0.3705  ok=True
+t=  10  m_t=0.8411  claimed lower bound=0.3417  ok=True
+t=  20  m_t=0.8099  claimed lower bound=0.3143  ok=True
+t=  50  m_t=0.7655  claimed lower bound=0.2808  ok=True
+t= 100  m_t=0.7352  claimed lower bound=0.2577  ok=True
+t= 200  m_t=0.7103  claimed lower bound=0.2364  ok=True
+t= 400  m_t=0.6833  claimed lower bound=0.2168  ok=True
+log-log slope over t=50..400: -0.0541 (theory ~ -1/(8z), z~2.17 -> -0.058)
+== high-T control (couplings x0.9)
+t=   1  m_t=0.9237  claimed lower bound=0.4358  ok=True
+t=   2  m_t=0.8791  claimed lower bound=0.4089  ok=True
+t=   5  m_t=0.8022  claimed lower bound=0.3705  ok=True
+t=  10  m_t=0.7298  claimed lower bound=0.3417  ok=True
+t=  20  m_t=0.6419  claimed lower bound=0.3143  ok=True
+t=  50  m_t=0.4841  claimed lower bound=0.2808  ok=True
+t= 100  m_t=0.3257  claimed lower bound=0.2577  ok=True
+t= 200  m_t=0.1661  claimed lower bound=0.2364  ok=False
+t= 400  m_t=0.0370  claimed lower bound=0.2168  ok=False

@@ -2,8 +2,8 @@
   "title": "Exponential ergodicity and the space-time Gibbs states of one-dimensional probabilistic cellular automata",
   "upload_type": "publication",
   "publication_type": "preprint",
-  "version": "1.1.0",
-  "publication_date": "2026-11-06",
+  "version": "1.2.0",
+  "publication_date": "2026-11-10",
   "creators": [
     {
       "name": "Douglas, Seth",
@@ -14,7 +14,7 @@
       "orcid": "0009-0005-6534-1118"
     }
   ],
-  "description": "A positive-rate probabilistic cellular automaton (PCA) defines a Gibbs specification in one more dimension, its space–time interaction, in which the future is a boundary like the past and the sides. For finite-alphabet, finite-radius, strictly positive PCA on ℤ we prove that uniform exponential ergodicity of the dynamics is equivalent to exponential weak spatial mixing of this specification in arbitrary finite volumes of ℤ² under arbitrary exterior conditions, so that the specification has exactly one DLR state, the stationary trajectory law, with exponentially decaying correlations. This answers in one dimension, under exponential ergodicity, the question of Lebowitz, Maes and Speer whether every Gibbs measure of the space–time interaction is a trajectory law of the PCA, previously known for periodic measures. In every dimension and with no rate, the relative-entropy defect of any Gibbs measure from the dynamics is a surface term; hence for an ergodic PCA the stationary trajectory is the only uniformly recurrent Gibbs measure, the translation action on the Gibbs simplex is uniquely ergodic, and all-DLR uniqueness holds exactly when every Gibbs measure is uniformly recurrent. The forward proof removes the far future boundary from Bérard's coupling from the past at an entropy cost that only one-dimensional geometry absorbs. Finite certificates for the hypothesis are exactly computable; for the noisy majority rule they give a unique space–time Gibbs state down to noise 0.485, including noise one half, and Marsan, Sablik and Törmä's fixed radius-one automaton has one space–time Gibbs state at small noise (granting structural estimates from their low-noise proof) and at large noise, and several in between.",
+  "description": "A positive-rate probabilistic cellular automaton (PCA) defines a Gibbs specification in one more dimension, its space–time interaction, in which the future is a boundary like the past and the sides. For finite-alphabet, finite-radius, strictly positive PCA on ℤ we prove that uniform exponential ergodicity of the dynamics is equivalent to exponential weak spatial mixing of this specification in arbitrary finite volumes of ℤ² under arbitrary exterior conditions, so that the specification has exactly one DLR state, the stationary trajectory law, with exponentially decaying correlations. This answers in one dimension, under exponential ergodicity, the question of Lebowitz, Maes and Speer whether every Gibbs measure of the space–time interaction is a trajectory law of the PCA, previously known for periodic measures. The forward proof removes the far future boundary from Bérard's coupling from the past at an entropy cost that only one-dimensional geometry absorbs. In every dimension, cutting the cluster of coupling failures at a late level, where its accumulated size dominates its width, removes the future boundary whenever the dynamics has a coalescing local flow satisfying the quantitative small-badness hypothesis of the prefix-cap theorem. In particular, if some basic i.i.d. random-map representation coalesces exponentially for all inputs at once, the specification has exactly one DLR state and exponential weak mixing in arbitrary volumes, and for attractive binary PCA in every dimension uniform exponential ergodicity is equivalent to exponential weak mixing. In every dimension and with no rate, the relative-entropy defect of any Gibbs measure from the dynamics is a surface term; hence for an ergodic PCA the stationary trajectory is the only uniformly recurrent Gibbs measure, the translation action on the Gibbs simplex is uniquely ergodic, and all-DLR uniqueness holds exactly when every Gibbs measure is uniformly recurrent. Finite certificates for the hypothesis are exactly computable; for the noisy majority rule they give a unique space–time Gibbs state down to noise 0.485, including noise one half, and Marsan, Sablik and Törmä's fixed radius-one automaton has one space–time Gibbs state at small noise (granting structural estimates from their low-noise proof) and at large noise, and several in between. Finally, as an explicit witness of a classical phenomenon, the synchronous heat-bath dynamics of the anisotropic Ising model at critical couplings is a positive PCA on ℤ² with a rational table that is uniformly ergodic but not exponentially ergodic: granting two classical exact formulas for the Ising model, the largest distance between the laws of one site at time t from two initial rows is at least (1/4)(t+1)^(−1/8).",
   "keywords": [
     "probabilistic cellular automata",
     "space-time Gibbs measures",
@@ -24,10 +24,18 @@
     "coupling from the past",
     "relative entropy",
     "noisy majority rule",
+    "Ising model",
     "statistical mechanics"
   ],
   "access_right": "open",
   "license": "cc-by-4.0",
   "language": "eng",
-  "notes": "Preprint. It has not been peer reviewed. Version 1.1.0. Text: CC BY 4.0. Scripts: MIT or Apache 2.0."
+  "notes": "Preprint. It has not been peer reviewed. Version 1.2.0 adds Section 13: in every dimension, a coalescing local flow satisfying the quantitative small-badness hypothesis of the prefix-cap theorem gives a unique Gibbs state of the space–time interaction (all DLR states, no invariance assumed), with exponential weak mixing in arbitrary volumes when a basic random-map representation coalesces exponentially for all inputs, and for attractive binary PCA exactly under uniform exponential ergodicity; and Section 11.6: an explicit critical heat-bath PCA on ℤ² with a rational table that is uniformly ergodic but not exponentially ergodic, given two classical exact formulas for the Ising model. Text: CC BY 4.0. Scripts: MIT or Apache 2.0.",
+  "related_identifiers": [
+    {
+      "identifier": "https://finite.works/papers/space-time-gibbs/",
+      "relation": "isDescribedBy",
+      "scheme": "url"
+    }
+  ]
 }

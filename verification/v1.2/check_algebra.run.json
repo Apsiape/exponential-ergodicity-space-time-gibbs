@@ -1,0 +1,10 @@
+{
+  "pid": 51084,
+  "script": "check_algebra.py",
+  "free_bytes_before": 15990145024,
+  "process_cap_bytes": 1000000000,
+  "job_cap_bytes": 1000000000,
+  "peak_process_bytes": 17711104,
+  "peak_job_bytes": 17711104,
+  "wall_seconds": 0.540029
+}
